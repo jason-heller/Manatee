@@ -1,0 +1,33 @@
+
+<!-- This is the root control, anything placed outside of it will be left out of the GUI -->
+<FloatingPane>
+
+	<!-- Game scene -->
+	<OpenGLPane fillWidth="true" fillHeight="true" renderCallback="worldspace-renderer" />
+
+	<!-- Main HUD pane -->
+	<FloatingPane background="null">
+	
+		<HBox class="bottom-bar" alignment="top_left">
+		
+		
+			<!-- Chatbox -->
+			<VBox minwidth="500">
+			
+				<TextArea id="chat-display" class="chatbox" fillWidth="true" editable="false">
+				
+				<TextField id="chat-input" class="chatbox" fillWidth="true">
+			
+			</VBox>
+		
+			<!-- Inventory -->
+			<GridPane hgap="6" vgap="6">
+			
+			
+			</GridPane>
+		
+		</HBox>
+	
+	</FloatingPane>
+	
+</FloatingPane>

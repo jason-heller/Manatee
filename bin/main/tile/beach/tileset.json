@@ -1,0 +1,8 @@
+[
+	{
+		"name": "Palm Tree",
+		"mesh": "palm",
+		"texture": "palm",
+		"flags": ["NATURE", "SOLID"]
+	}
+]

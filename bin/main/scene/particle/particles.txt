@@ -1,0 +1,22 @@
+smoke{
+	Emission; 0.6484375; 1; 0.0
+	Mesh; 1
+	Life; 10.0
+	Scale; 0.5
+	Impulse; 0.0; 0.0; 1.0; 0.0; 1.0; 0.0
+	Sway; 0.9; 0.01
+	Gravity; -0.25
+	Color; 1.0; 1.0; 1.0; 1.0
+	Wind; 1.0
+}
+test{
+	Emission; 0.6484375; 1; 0.0
+	Mesh; 0
+	Gravity; 12.0
+	Impulse; 0.0; 0.0; 1.0; 0.25; 15.0; 3.0
+	Life; 2.0
+	Rotate3d; 2.0
+	Scale; 1.0
+	Color; 0.0; 1.0; 1.0; 1.0
+	FadeOut; 1.0; 1.0
+}

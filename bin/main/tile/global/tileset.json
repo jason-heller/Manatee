@@ -1,0 +1,68 @@
+[
+	{
+		"name": "Rock",
+		"mesh": "rock",
+		"texture": "stone0",
+		"flags": ["NATURE", "SOLID"]
+	},
+	{
+		"name": "Cobble Wall",
+		"mesh": "wall_unit",
+		"texture": "cobble0",
+		"trailer": "wall_unit_cornerturret",
+		"trailerOnBothEnds": true,
+		"corners": "wall_unit_cornerturret",
+		"flags": ["WALL_X_FLAGS"]
+	},
+	{
+		"name": "Fence",
+		"mesh": "fence",
+		"texture": "planks0",
+		"trailer": "fence_end",
+		"corners": "fence_corner",
+		"flipCorners": true,
+		"flags": ["WALL_X_FLAGS", "BUILDING"]
+	},
+	{
+		"name": "path",
+		"mesh": "floor",
+		"texture": "planks0",
+		"corners": "floor_corner",
+		"flipCorners": true,
+		"flags": ["FLOOR_FLAGS", "BUILDING"]
+	},
+	{
+		"name": "water (1x1)",
+		"mesh": "water_1x1",
+		"texture": "water",
+		"shader": "WATER",
+		"flags": ["IGNORE_HEIGHTFIELD", "NATURE"]
+	},
+	{
+		"name": "water (8x8)",
+		"mesh": "water_8x8",
+		"texture": "water",
+		"shader": "WATER",
+		"flags": ["IGNORE_HEIGHTFIELD", "NATURE"]
+	},
+	{
+		"name": "Tree Stem",
+		"mesh": "tree_stem0",
+		"texture": "bark0",
+		"flags": ["NATURE"]
+	},
+	{
+		"name": "Tree Folige (Static)",
+		"mesh": "tree_foliage0",
+		"texture": "stone0",
+		"shader": "FOLIAGE",
+		"flags": ["NATURE"]
+	},
+	{
+		"name": "Invisible Wall",
+		"mesh": "wall_unit_corner",
+		"texture": "nodraw",
+		"flags": ["SKIPS_MESHING", "SOLID", "TRIPLANAR_TEXTURE_MAPPING"]
+	}
+	
+]

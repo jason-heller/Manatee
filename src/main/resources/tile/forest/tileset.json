@@ -1,0 +1,51 @@
+[
+	{
+		"name": "Whitewash",
+		"mesh": "wall_thin",
+		"texture": "fachwerk",
+		"trailer": "wall_thin_trailer",
+		"trailerOnBothEnds": true,
+		"corners": "wall_thin_corner",
+		"flipCorners": true,
+		"flags": ["WALL_X_FLAGS", "BUILDING"]
+	},
+	{
+		"name": "Gas Lamp Post",
+		"mesh": "lamp1",
+		"texture": "lamp1",
+		"shader": "TRANSLUCENT",
+		"flags": ["BUILDING"]
+	},
+	{
+		"name": "Cantilevered Lamp Post +Y",
+		"mesh": "lamp0",
+		"texture": "lamp0",
+		"flags": ["BUILDING", "FLIP_Y"]
+	},
+	{
+		"name": "Cantilevered Lamp Post -Y",
+		"mesh": "lamp0",
+		"texture": "lamp0",
+		"flags": ["BUILDING"]
+	},
+	{
+		"name": "Cantilevered Lamp Post +X",
+		"mesh": "lamp0",
+		"texture": "lamp0",
+		"flags": ["BUILDING", "ROTATE_90CW"]
+	},
+	{
+		"name": "Cantilevered Lamp Post -X",
+		"mesh": "lamp0",
+		"texture": "lamp0",
+		"flags": ["BUILDING", "ROTATE_90CW", "FLIP_Y"]
+	},
+	{
+		"name": "Cobble Path",
+		"mesh": "floor",
+		"texture": "cobble_path0",
+		"corners": "floor_corner",
+		"flipCorners": true,
+		"flags": ["FLOOR_FLAGS", "BUILDING"]
+	}
+]
