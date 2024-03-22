@@ -12,7 +12,7 @@ import manatee.client.gl.mesh.TileFieldMesh;
 import manatee.client.map.light.ILight;
 import manatee.client.map.tile.Tile;
 import manatee.client.map.tile.TileUpdate;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class MapRegion
 {
@@ -210,7 +210,7 @@ public class MapRegion
 			}
 			else
 			{
-				shader.setUniform("v_LightVectors[" + i + "]", Vectors.EMPTY);
+				shader.setUniform("v_LightVectors[" + i + "]", MCache.EMPTY);
 			}
 
 			shader.setUniform("v_LightOrigins[" + i + "]", light.getOrigin());
@@ -245,5 +245,11 @@ public class MapRegion
 				
 			}
 		}
+	}
+
+	public boolean containsPoint(Vector2i change)
+	{
+		return position.x <= change.x && position.y <= change.y
+				&& position.x + getWidth() > change.x && position.y + getHeight() > change.y;
 	}
 }

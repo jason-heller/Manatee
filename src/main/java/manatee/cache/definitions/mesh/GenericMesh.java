@@ -7,30 +7,43 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.joml.Vector3f;
+
 import manatee.cache.definitions.MeshUtil;
 
 public class GenericMesh extends BaseMeshIndexed
 {
 	protected int vertexCount;
+	
+	protected Vector3f color;
 
-	public GenericMesh(FloatBuffer positions, IntBuffer indices)
+	public GenericMesh(FloatBuffer positions, IntBuffer indices, Vector3f color)
 	{
 		load(positions, indices);
 
 		vertexCount = indices.capacity();
+		
+		this.color = color;
 	}
 	
-	public GenericMesh(float[] positions, int[] indices)
+	public GenericMesh(float[] positions, int[] indices, Vector3f color)
 	{
 		load(positions, indices);
 
 		vertexCount = indices.length;
+
+		this.color = color;
 	}
 
+	public Vector3f getColor()
+	{
+		return color;
+	}
+	
 	@Override
 	protected void setAttribPointers()
 	{
-		MeshUtil.attribInterlacedf(3, 2, 3, 3);
+		MeshUtil.attribInterlacedf(3, 2, 3);
 	}
 
 	@Override
@@ -46,7 +59,6 @@ public class GenericMesh extends BaseMeshIndexed
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-		glEnableVertexAttribArray(3);
 	}
 	
 	@Override
@@ -55,7 +67,6 @@ public class GenericMesh extends BaseMeshIndexed
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
-		glDisableVertexAttribArray(3);
 		glBindVertexArray(0);
 	}
 }

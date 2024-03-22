@@ -1,11 +1,13 @@
 package manatee.client.entity;
 
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import manatee.client.Time;
 import manatee.client.scene.MapScene;
+import manatee.maths.Maths;
+import manatee.maths.MCache;
 
 public class PathFollower
 {
@@ -18,11 +20,15 @@ public class PathFollower
 	
 	private boolean closedPath = false;
 	
-	private Vector3f position;
+	private float angle;
 	
-	public PathFollower(Vector3f position)
+	private Vector3f position;
+	private Quaternionf rotation;
+	
+	public PathFollower(Vector3f position, Quaternionf rotation)
 	{
 		this.position = position;
+		this.rotation = rotation;
 	}
 	
 	public boolean hasClosedPath()
@@ -35,13 +41,15 @@ public class PathFollower
 		this.closedPath = closedpath;
 	}
 	
-	public void update(MapScene scene)
+	public boolean update(MapScene scene)
 	{
 		if (path != null)
-			walkPath();
+			return walkPath();
+		
+		return false;
 	}
 	
-	private void walkPath()
+	private boolean walkPath()
 	{
 		Vector2f pos = new Vector2f(position.x, position.y);
 		
@@ -53,6 +61,12 @@ public class PathFollower
 		position.y += direction.y * speed;
 		
 		float distanceTraveledSqr = pos.distanceSquared(segmentOrigin.x, segmentOrigin.y);
+
+		float angleTo = (float) Math.atan2(direction.y, direction.x) + Maths.HALFPI;
+		
+		angle = Maths.lerpAngle(angle, angleTo, 10f * Time.deltaTime);
+		
+		rotation.fromAxisAngleRad(MCache.Z_AXIS, angle);
 		
 		if (distanceTraveledSqr >= segmentDistanceSqr)
 		{
@@ -64,10 +78,15 @@ public class PathFollower
 			direction.normalize();
 			
 			if (pathIndex == 0 && !closedPath)
+			{
 				path = null;
+				return true;
+			}
 			else
 				segmentDistanceSqr = new Vector2f(position.x, position.y).distanceSquared(path[pathIndex].x, path[pathIndex].y);
 		}
+		
+		return false;
 	}
 
 	public void setPath(Vector2f[] path)

@@ -9,12 +9,9 @@ import java.util.Set;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
-import org.joml.Vector3f;
 
 import manatee.client.map.MapGeometry;
 import manatee.client.map.tile.Tile;
-import manatee.primitives.Primitive;
-import manatee.primitives.Primitives;
 
 public class PathFind
 {
@@ -31,7 +28,7 @@ public class PathFind
 	
 	private static final int MAX_ITERATIONS = 80;
 	
-	private static List<Primitive> pts = new ArrayList<>();
+	//private static List<Primitive> pts = new ArrayList<>();
 	
 	public static Vector2f[] aStar(int startX, int startY, int endX, int endY, MapGeometry geom)
 	{
@@ -55,9 +52,9 @@ public class PathFind
 		
 		List<Vector2f> result = new LinkedList<>();
 		
-		for(Primitive p : pts)
+		/*for(Primitive p : pts)
 			Primitives.remove(p);
-		pts.clear();
+		pts.clear();*/
 
 		Vector2i current = null;
 
@@ -93,9 +90,9 @@ public class PathFind
 	            while(!v.equals(start)){
 	            	result.add(0, new Vector2f(v.x + 0.5f, v.y + 0.5f));
 	                v = parents.get(v);
-	                pts.add(Primitives.addBox(new Vector3f(v.x + .5f, v.y + .5f, 1f), new Vector3f(.5f,.5f,0f)));
+	                //pts.add(Primitives.addBox(new Vector3f(v.x + .5f, v.y + .5f, 1f), new Vector3f(.5f,.5f,0f)));
 	            }
-	            pts.add(Primitives.addBox(new Vector3f(end.x + .5f, end.y + .5f, 1f), new Vector3f(.5f,.5f,0f)));
+	            //pts.add(Primitives.addBox(new Vector3f(end.x + .5f, end.y + .5f, 1f), new Vector3f(.5f,.5f,0f)));
 	            
 				return result.toArray(new Vector2f[0]);
 			}

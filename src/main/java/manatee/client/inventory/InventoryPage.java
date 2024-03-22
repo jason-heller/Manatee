@@ -1,9 +1,34 @@
 package manatee.client.inventory;
 
+import manatee.client.inventory.item.ItemData;
+
 public class InventoryPage
 {
-	private static final int ROWS = 6;
-	private static final int COLS = 4;
 	
-	private InventorySlot[] slots = new InventorySlot[ROWS * COLS];
+	private InventorySlot[] slots;
+	
+	public InventoryPage(int size)
+	{
+		slots = new InventorySlot[size];
+		
+		for(int i = 0; i < size; i++)
+			slots[i] = new InventorySlot();
+	}
+	
+	public InventorySlot getSlot(int slotIndex)
+	{
+		return slots[slotIndex];
+	}
+
+	public void addItem(ItemData item)
+	{
+		for(int i = 0; i < slots.length; i++)
+		{
+			if (slots[i].getItem() == null)
+			{
+				slots[i].setItem(item);
+				return;
+			}
+		}
+	}
 }

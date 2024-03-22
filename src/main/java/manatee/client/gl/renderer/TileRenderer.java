@@ -26,6 +26,8 @@ import manatee.client.map.MapRegion;
 import manatee.client.map.tile.TileAssets;
 import manatee.client.scene.MapScene;
 import manatee.client.scene.WaterHandler;
+import manatee.client.ui.ClientRenderer;
+import manatee.maths.MCache;
 
 public class TileRenderer
 {
@@ -46,10 +48,10 @@ public class TileRenderer
 	public TileRenderer(Vector3f lightColor, Vector3f lightVector)
 	{
 		shaders = new Shader[] {
-				new Shader("scene/tile/generic.vsh", "scene/tile/generic.fsh"),
-				new Shader("scene/tile/foliage.vsh", "scene/tile/foliage.fsh"),
-				new Shader("scene/tile/water.vsh", "scene/tile/water.fsh"),
-				new Shader("scene/tile/translucent.vsh", "scene/tile/translucent.fsh")
+				new Shader("shader/tile/generic.vsh", "shader/tile/generic.fsh"),
+				new Shader("shader/tile/foliage.vsh", "shader/tile/foliage.fsh"),
+				new Shader("shader/tile/water.vsh", "shader/tile/water.fsh"),
+				new Shader("shader/tile/translucent.vsh", "shader/tile/translucent.fsh")
 		};
 		
 		this.lightColor = lightColor;
@@ -138,6 +140,13 @@ public class TileRenderer
 		
 		shader.setUniform("v_AmbientColor", lightColor);
 		shader.setUniform("v_AmbientVector", lightVector);
+		
+		if (ClientRenderer.fullbright)
+		{
+			shader.setUniform("v_LightNum", 0);
+			shader.setUniform("v_AmbientColor", MCache.ONE);
+			shader.setUniform("v_AmbientVector", MCache.Z_AXIS);
+		}
 		
 		draw(shader, shaderTarget, regions, true);
 		

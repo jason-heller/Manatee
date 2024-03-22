@@ -4,7 +4,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class AmbientLight implements ILight
 {

@@ -6,7 +6,6 @@ import java.util.List;
 import org.joml.Vector3f;
 
 import manatee.cache.definitions.texture.ITexture;
-import manatee.client.dev.Dev;
 import manatee.client.gl.camera.ICamera;
 import manatee.client.gl.particle.attribs.IParticleAttrib;
 
@@ -31,8 +30,10 @@ public abstract class ParticleSystem
 	public void update(ICamera camera)
 	{
 		for(ParticleEmitter emitter : emitters)
+		{
 			if (emitter.isEnabled())
 				emitter.tick();
+		}
 		
 		for(IParticleAttrib attrib : attributes)
 		{
@@ -100,15 +101,31 @@ public abstract class ParticleSystem
 	public void setParticlesPerSecond(float particlesPerSecond)
 	{
 		this.particlesPerSecond = particlesPerSecond;
+		
+		for(ParticleEmitter emitter : emitters)
+		{
+			emitter.setParticlesPerSecond(particlesPerSecond, emissionVariance);
+		}
+		
 	}
 
 	public void setParticlesPerEmission(int particlesPerEmission)
 	{
 		this.particlesPerEmission = particlesPerEmission;
+		
+		for(ParticleEmitter emitter : emitters)
+		{
+			emitter.setParticlesPerEmission(particlesPerEmission);
+		}
 	}
 
 	public void setEmissionVariance(float emissionVariance)
 	{
 		this.emissionVariance = emissionVariance;
+		
+		for(ParticleEmitter emitter : emitters)
+		{
+			emitter.setParticlesPerSecond(particlesPerSecond, emissionVariance);
+		}
 	}
 }

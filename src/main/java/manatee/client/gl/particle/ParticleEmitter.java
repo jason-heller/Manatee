@@ -2,8 +2,6 @@ package manatee.client.gl.particle;
 
 import org.joml.Vector3f;
 
-import manatee.client.dev.Dev;
-
 public class ParticleEmitter
 {
 	protected long msPerEmission;

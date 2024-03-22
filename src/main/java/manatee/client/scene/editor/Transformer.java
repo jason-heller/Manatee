@@ -24,7 +24,7 @@ import manatee.client.input.KeybindsInternal;
 import manatee.client.scene.WindowPicker;
 import manatee.client.scene.editor.history.ActionHistory;
 import manatee.client.scene.editor.history.TransformAction;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class Transformer
 {
@@ -60,7 +60,7 @@ public class Transformer
 	public Transformer(final Vector3f mouseRay)
 	{
 		this.mouseRay = mouseRay;
-		transformAxis = Vectors.Z_AXIS;
+		transformAxis = MCache.Z_AXIS;
 	}
 	
 	public void transform(ICamera camera)
@@ -127,7 +127,7 @@ public class Transformer
 		case SCALE:
 			
 			transformV.set(transformAxis).mul(mTransformVec.length() / mTransLenIdentity);
-			transformV.add(new Vector3f(Vectors.ONE).sub(transformAxis));
+			transformV.add(new Vector3f(MCache.ONE).sub(transformAxis));
 			
 			mTransLine.setPoints(mx, my, mTransSSOrigin.x, mTransSSOrigin.y);
 
@@ -168,13 +168,13 @@ public class Transformer
 	public void update(ICamera camera, Set<SpatialEntity> selected, ActionHistory history, List<NVGObject> nvgObjects)
 	{
 		if (Input.isPressed(KeybindsInternal.X))
-			transformAxis = Vectors.X_AXIS;
+			transformAxis = MCache.X_AXIS;
 		
 		if (Input.isPressed(KeybindsInternal.Y))
-			transformAxis = Vectors.Y_AXIS;
+			transformAxis = MCache.Y_AXIS;
 		
 		if (Input.isPressed(KeybindsInternal.Z))
-			transformAxis = Vectors.Z_AXIS;
+			transformAxis = MCache.Z_AXIS;
 		
 		if (selected.size() > 0)
 		{
@@ -185,7 +185,7 @@ public class Transformer
 				
 				if (transform != Transformation.TRANSLATION)
 				{
-					transformAxis = Vectors.XY_AXIS;
+					transformAxis = MCache.XY_AXIS;
 
 					transformables.clear();
 					for (SpatialEntity e : selected)
@@ -228,7 +228,7 @@ public class Transformer
 					if (nSelected != 0) 
 					{
 						mTransAngleIdentity = mTransformAngle;
-						transformAxis = Vectors.Z_AXIS;
+						transformAxis = MCache.Z_AXIS;
 	
 						mTransSSOrigin.div(nSelected);
 						
@@ -261,7 +261,7 @@ public class Transformer
 					
 					if (nSelected != 0) 
 					{
-						transformAxis = Vectors.ONE;
+						transformAxis = MCache.ONE;
 	
 						mTransSSOrigin.div(nSelected);
 						mTransSSNormal.set(mTransSSOrigin).sub(mx, my).normalize();

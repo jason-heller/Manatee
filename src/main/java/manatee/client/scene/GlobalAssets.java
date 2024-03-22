@@ -8,6 +8,7 @@ import manatee.cache.definitions.mesh.GenericMesh;
 import manatee.cache.definitions.mesh.IMesh;
 import manatee.cache.definitions.sound.Sound;
 import manatee.cache.definitions.texture.ITexture;
+import manatee.maths.MCache;
 
 public class GlobalAssets extends Assets
 {
@@ -44,10 +45,10 @@ public class GlobalAssets extends Assets
 	{
 		final float[] vertices =
 		{
-				0.5f, -0.5f, 0, 1f, 1f, 0, 0, 1, 1, 1, 1,
-				0.5f, 0.5f, 0, 1f, 0f, 0, 0, 1, 1, 1, 1,
-				-0.5f, 0.5f, 0, 0f, 0f, 0, 0, 1, 1, 1, 1,
-				-0.5f, -0.5f, 0, 0f, 1f, 0, 0, 1, 1, 1, 1
+				0.5f, -0.5f, 0, 1f, 1f, 0, 0, 1,
+				0.5f, 0.5f, 0, 1f, 0f, 0, 0, 1,
+				-0.5f, 0.5f, 0, 0f, 0f, 0, 0, 1,
+				-0.5f, -0.5f, 0, 0f, 1f, 0, 0, 1,
 		};
 		
 		final int[] indices =
@@ -56,7 +57,7 @@ public class GlobalAssets extends Assets
 		};
 
 
-		GenericMesh billboard = new GenericMesh(vertices, indices);
+		GenericMesh billboard = new GenericMesh(vertices, indices, MCache.ONE);
 
 		billboard.setBounds(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector3f(0.5f, 0.5f, 0.5f));
 		

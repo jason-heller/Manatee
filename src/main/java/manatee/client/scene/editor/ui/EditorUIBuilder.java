@@ -258,10 +258,13 @@ public class EditorUIBuilder implements UIBuilder
 							combo.getItems().add("Smooth");
 							combo.getItems().add("Flatten");
 							combo.getItems().add("Zero");
+							combo.getItems().add("Paint_Texture");
+							combo.getItems().add("Erase_Texture");
+							
 							combo.setValue("Raise");
 							
 							combo.setOnAction((e) -> {
-								scene.getHeightMode(HeightToolMode.valueOf(combo.getValue().toUpperCase()));
+								scene.setHeightMode(HeightToolMode.valueOf(combo.getValue().toUpperCase()));
 							});
 							
 							t.getChildren().add(combo);
@@ -389,7 +392,7 @@ public class EditorUIBuilder implements UIBuilder
 						{
 							String json;
 						
-							json = Files.readString(Paths.get("src/main/resources/scene/editor/edict.json"), StandardCharsets.UTF_8);
+							json = Files.readString(Paths.get("src/main/resources/data/editor/edict.json"), StandardCharsets.UTF_8);
 							
 							Gson gson = new GsonBuilder().create();
 							
@@ -763,16 +766,16 @@ public class EditorUIBuilder implements UIBuilder
 	@Override
 	public void initImages()
 	{
-		selectToolImage = new Image("scene/editor/ui/select-tool.jpg");
-		cameraToolImage = new Image("scene/editor/ui/camera-tool.jpg");
-		entityToolImage = new Image("scene/editor/ui/entity-tool.jpg");
-		itemToolImage = new Image("scene/editor/ui/item-tool.jpg");
-		heightToolImage = new Image("scene/editor/ui/height-tool.jpg");
-		addChunkToolImage = new Image("scene/editor/ui/add-chunk-tool.jpg");
+		selectToolImage = new Image("ui/editor/select-tool.jpg");
+		cameraToolImage = new Image("ui/editor/camera-tool.jpg");
+		entityToolImage = new Image("ui/editor/entity-tool.jpg");
+		itemToolImage = new Image("ui/editor/item-tool.jpg");
+		heightToolImage = new Image("ui/editor/height-tool.jpg");
+		addChunkToolImage = new Image("ui/editor/add-chunk-tool.jpg");
 		
-		entBboxImage = new Image("scene/editor/ui/ent_bbox.png");
-		snapImage = new Image("scene/editor/ui/snap.png");
-		lockImage = new Image("scene/editor/ui/lock.png");
+		entBboxImage = new Image("ui/editor/ent_bbox.png");
+		snapImage = new Image("ui/editor/snap.png");
+		lockImage = new Image("ui/editor/lock.png");
 	}
 	
 	public void setPropertyBox(int vis)

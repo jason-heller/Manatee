@@ -44,4 +44,9 @@ public class Maths
 	public static float lerp(float s, float t, float amount) {
 		return s * (1f - amount) + t * amount;
 	}
+	
+	public static float lerpAngle(float s, float t, float amount) {
+		float delta = ((t - s + 9.42478f) % Maths.TWOPI) - Maths.PI;
+        return (s + delta * amount + Maths.TWOPI) % Maths.TWOPI;
+	}
 }

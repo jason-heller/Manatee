@@ -7,5 +7,7 @@ public enum EntityShaderTarget
 	@SerializedName("GENERIC")
 	GENERIC,
 	@SerializedName("FOLIAGE")
-	FOLIAGE;
+	FOLIAGE,
+	@SerializedName("ANIMATED")
+	ANIMATED;
 }

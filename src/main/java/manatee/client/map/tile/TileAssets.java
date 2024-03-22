@@ -124,7 +124,7 @@ public class TileAssets extends Assets
 			}
 			else
 			{
-				IMesh[] meshArr = MeshLoader.loadModel(new File(TILE_RESOURCE_PATH + name + "/ent/" + filePath));
+				IMesh[] meshArr = MeshLoader.loadModel(new File(TILE_RESOURCE_PATH + name + "/ent/" + filePath)).getMeshes();
 				ITexture[] texArr = new ITexture[meshArr.length];
 				
 				for(int i = 0; i < meshArr.length; i++)

@@ -3,6 +3,8 @@ package manatee.client.gl.camera;
 import lwjgui.LWJGUI;
 import lwjgui.scene.Node;
 import lwjgui.scene.layout.OpenGLPane;
+import lwjgui.scene.layout.Pane;
+import manatee.client.dev.Dev;
 import manatee.client.dev.DeveloperConsole;
 import manatee.client.input.Input;
 import manatee.client.input.Keybinds;
@@ -24,6 +26,9 @@ public abstract class ControllableCamera extends StaticCamera
 		Node hovered = LWJGUI.getThreadWindow().getContext().getHovered();
 		//Node selected = LWJGUI.getThreadWindow().getContext().getSelected();
 		controllable = hovered instanceof OpenGLPane;
+		
+		if (hovered instanceof Pane && ((Pane)hovered).getChildren().size() == 0)
+			controllable = true;
 		
 		dragging = draggable && Input.isHeld(Keybinds.SELECT);
 		dragging &= !DeveloperConsole.isVisible();

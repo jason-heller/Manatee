@@ -22,7 +22,7 @@ public class SphereEmitterParticleAttrib implements IParticleAttrib
 	@Override
 	public void init(Particle particle)
 	{
-		Vector3f pos = particle.getPosition();
+		Vector3f pos = new Vector3f();
 		
 		float yaw = (float)Math.random() * Maths.TWOPI;
 		float pitch = (float)Math.random() * Maths.TWOPI;
@@ -35,6 +35,9 @@ public class SphereEmitterParticleAttrib implements IParticleAttrib
 		q.transform(pos);
 		pos.mul((float)Math.random() * radius);
 		pos.add(origin);
+		
+
+		particle.getPosition().add(pos);
 	}
 
 	@Override

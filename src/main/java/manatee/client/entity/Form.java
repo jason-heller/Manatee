@@ -9,11 +9,12 @@ import org.joml.Vector4f;
 
 import manatee.cache.definitions.Model;
 import manatee.cache.definitions.mesh.IMesh;
+import manatee.cache.definitions.mesh.anim.Animator;
 import manatee.cache.definitions.texture.ITexture;
 import manatee.client.gl.mesh.EntityShaderTarget;
 import manatee.client.scene.GlobalAssets;
 import manatee.client.scene.MapScene;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 /**
  * A form is an entity with a visible presence in the game scene.
@@ -28,8 +29,9 @@ public abstract class Form extends SpatialEntity
 	protected boolean lod = false;
 	protected float lodDistanceSqr;
 
-	protected IMesh[] meshes;
-	protected ITexture[] textures;
+	protected Model model;
+	
+	protected Animator animator;
 	
 	private boolean fullbright;
 
@@ -49,26 +51,23 @@ public abstract class Form extends SpatialEntity
 		this.visible = visible;
 	}
 
-	public int getNumMeshes()
-	{
-		return meshes.length;
-	}
-	
 	public void setGraphic(IMesh mesh, ITexture texture, EntityShaderTarget shaderTarget)
 	{
 		setShaderTarget(shaderTarget);
+		
+		ITexture[] textures = null;
 		
 		if (mesh == null)
 		{
 			mesh = GlobalAssets.MISSING_MESH;
 			this.color = MISSING_COLOR;
-			this.textures = new ITexture[] {NO_TEX};
+			textures = new ITexture[] {NO_TEX};
 		}
 		
 		if (texture == null)
 			texture = GlobalAssets.MISSING_TEX;
 		
-		if (this.meshes == null && this.boundingBox.halfExtents.equals(Vectors.EMPTY))
+		if (model == null && this.boundingBox.halfExtents.equals(MCache.EMPTY))
 		{
 			Vector3f halfExtents = new Vector3f(mesh.getMax()).sub(mesh.getMin()).mul(0.5f);
 
@@ -76,21 +75,20 @@ public abstract class Form extends SpatialEntity
 			this.boundingBox.halfExtents.set(halfExtents);
 		}
 		
-		
-		this.meshes = new IMesh[] {mesh};
+		IMesh[] meshes = new IMesh[] {mesh};
+		this.model = new Model(meshes, textures);
 	}
 	
 	public void setGraphic(Model model, EntityShaderTarget shaderTarget)
 	{
-		this.meshes = model.getMeshes();
-		this.textures = model.getTextures();
+		this.model = model;
 		
 		setShaderTarget(shaderTarget);
 		
 		Vector3f sceneMax = new Vector3f(Float.NEGATIVE_INFINITY);
 		Vector3f sceneMin = new Vector3f(Float.POSITIVE_INFINITY);
 		
-		for(IMesh mesh : meshes)
+		for(IMesh mesh : model.getMeshes())
 		{
 			sceneMax.max(mesh.getMax());
 			sceneMin.min(mesh.getMin());
@@ -99,6 +97,11 @@ public abstract class Form extends SpatialEntity
 
 			//Vector3f center = new Vector3f(mesh.getMin()).add(halfExtents);
 			this.boundingBox.halfExtents.set(halfExtents);
+		}
+		
+		if (model.isAnimated())
+		{
+			animator = new Animator(model);
 		}
 	}
 
@@ -114,6 +117,9 @@ public abstract class Form extends SpatialEntity
 	public void updateInternal(MapScene scene)
 	{
 		boundingBox.update();
+		
+		if (animator != null)
+			animator.tick();
 		
 		update(scene);
 		
@@ -132,18 +138,18 @@ public abstract class Form extends SpatialEntity
 	
 	public void setColor(Vector4f color)
 	{
-		if (meshes[0] != GlobalAssets.MISSING_MESH)
+		if (model.getMeshes()[0] != GlobalAssets.MISSING_MESH)
 			this.color = color;
 	}
 
 	public IMesh getMesh(int i)
 	{
-		return meshes[i];
+		return model.getMeshes()[i];
 	}
 
 	public ITexture getTexture(int i)
 	{
-		return textures[i];
+		return model.getTextures()[i];
 	}
 
 	public boolean isFullbright()
@@ -184,5 +190,15 @@ public abstract class Form extends SpatialEntity
 	public void setShaderTarget(EntityShaderTarget shaderTarget)
 	{
 		this.shaderTarget = shaderTarget;
+	}
+
+	public Model getModel()
+	{
+		return model;
+	}
+
+	public Animator getAnimator()
+	{
+		return animator;
 	}
 }

@@ -46,12 +46,12 @@ public class LightLump implements Serializable
 		}
 	}
 
-	private void addLight(MapGeometry geom, ILight light)
+	private static void addLight(MapGeometry geom, ILight light)
 	{
 		float x = light.getOrigin().x;
 		float y = light.getOrigin().y;
 		float r = light.getFalloff();
-		Collection<MapRegion> regions = geom.getRegionsIn(x-r, y-r, x+r, y+r);
+		Collection<MapRegion> regions = geom.getRegionsIn(x-r, y-r, r*r, r*r);
 		
 		for(MapRegion reg : regions)
 			reg.addLight(light);
@@ -62,15 +62,15 @@ public class LightLump implements Serializable
 		MapGeometry geom = scene.getMap().getGeometry();
 		Iterator<MapRegion> iter = geom.getMapRegions().iterator();
 		List<LightLump> lights = new LinkedList<>();
-		int i = 0;
+
 		while(iter.hasNext())
 		{
 			MapRegion region = iter.next();
 			
 			for(ILight light : region.getLights())
 			{
-				if (light == null)
-					break;
+				if (light == null || geom.getRegionAt(light.getOrigin().x, light.getOrigin().y) != region)
+					continue;
 				
 				lights.add(new LightLump(light));
 			}

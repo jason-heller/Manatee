@@ -2,14 +2,14 @@ package manatee.primitives.gl;
 
 import org.lwjgl.opengl.GL11;
 
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.primitives.Primitive;
 
 public class LineRenderer implements PrimitiveRenderer {
 
     @Override
     public void preRender(PrimitiveShader shader) {
-        shader.setUniform("Scale", Vectors.ONE);
+        shader.setUniform("Scale", MCache.ONE);
     }
 
     @Override

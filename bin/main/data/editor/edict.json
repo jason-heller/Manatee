@@ -1,0 +1,173 @@
+[
+	{
+		"name": "Player",
+		"model": "player_start",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "ExitEntity",
+		"texture": "exit",
+		"color": {
+			"x": 1.0,
+			"y": 0.0,
+			"z": 0.0,
+			"w": 1.0
+		},
+		"tags": {
+			"destination": "unset"
+		}
+	},
+	{
+		"name": "EntranceEntity",
+		"texture": "exit",
+		"color": {
+			"x": 1.0,
+			"y": 0.0,
+			"z": 0.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "SunControl",
+		"texture": "sun",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 0.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "PointLight",
+		"texture": "light",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+			"radius": 7.0
+		}
+	},
+	{
+		"name": "SpotLight",
+		"model": "spotlight",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+			"radius": 7.0
+		}
+	},
+	{
+		"name": "AmbientLight",
+		"model": "spotlight",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "WaterControl",
+		"texture": "water",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 0.0,
+			"w": 1.0
+		},
+		"tags": {
+			"reflectivity": "0.0",
+			"flowSpeed": "0.0",
+			"waveAmplitude": 1.0
+			
+		}
+	},
+	{
+		"name": "WindControl",
+		"texture": "wind",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+			"windSpeed": "0.0",
+			"windStrength": 1.0
+		}
+	},
+	{
+		"name": "SoundscapeEntity",
+		"texture": "soundscape",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+			"sound": "sfxname",
+			"radius": 20,
+			"needsLineOfSight": "true"
+		}
+	},
+	{
+		"name": "Oak Tree Leaves",
+		"model": "tree_foliage0",
+		"shader": "FOLIAGE",
+		"lod": true,
+		"lodDistanceSqr": 1600,
+		"color": {
+			"x": 0.39,
+			"y": 0.85,
+			"z": 0.054,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "Park Bench",
+		"model": "bench0",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	},
+	{
+		"name": "CampfireEffect",
+		"texture": "particle",
+		"color": {
+			"x": 1.0,
+			"y": 1.0,
+			"z": 1.0,
+			"w": 1.0
+		},
+		"tags": {
+		}
+	}
+]

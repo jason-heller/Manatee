@@ -1,0 +1,10 @@
+[
+	{
+		"name": "Missing Item",
+		"description": "If you see this, something is probably busted.",
+		"graphic": "PAGE0",
+		"graphicX": 0,
+		"graphicY": 0,
+		"quality": "common"
+	}
+]

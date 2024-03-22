@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.joml.Vector2i;
 
+import manatee.cache.definitions.field.DataFieldf;
 import manatee.client.map.MapGeometry;
 import manatee.client.map.MapRegion;
 import manatee.client.scene.editor.HeightToolMode;
@@ -54,7 +55,9 @@ public class DeltaHeightAction implements IHeightAction
 			List<MapRegion> fields = addHeight(change.x, change.y, delta, radius);
 			
 			for(MapRegion hf : fields)
+			{
 				geom.rebuild(hf);
+			}
 		}
 		
 		updateTilesets();
@@ -68,7 +71,9 @@ public class DeltaHeightAction implements IHeightAction
 			List<MapRegion> fields = addHeight(change.x, change.y, -delta, radius);
 			
 			for(MapRegion hf : fields)
+			{
 				geom.rebuild(hf);
+			}
 		}
 		
 		updateTilesets();
@@ -105,6 +110,10 @@ public class DeltaHeightAction implements IHeightAction
 						if (pixelX < fx1 || pixelY < fy1 || pixelX >= fx2 || pixelY >= fy2)
 							continue;
 						
+						DataFieldf df = region.getHeightData();
+						float dfValue = df.get(pixelX, pixelY);
+						int originalTexBits = Float.floatToIntBits(dfValue) & 7;
+						
 						if (!fields.contains(region))
 							fields.add(region);
 						
@@ -113,11 +122,23 @@ public class DeltaHeightAction implements IHeightAction
 						switch(mode)
 						{
 						case RAISE:
-							region.getHeightData().add(delta * strength, pixelX, pixelY);
+						{
+							df.add(delta * strength, pixelX, pixelY);
+							
+							// Ensure the last 3 bits are free
+							float v = df.get(pixelX, pixelY);
+							df.set(Float.intBitsToFloat((Float.floatToIntBits(v) & ~7) | originalTexBits), pixelX, pixelY);
 							break;
+						}
 						case LOWER:
-							region.getHeightData().add(-delta * strength, pixelX, pixelY);
+						{
+							df.add(-delta * strength, pixelX, pixelY);
+
+							// Ensure the last 3 bits are free
+							float v = df.get(pixelX, pixelY);
+							df.set(Float.intBitsToFloat((Float.floatToIntBits(v) & ~7) | originalTexBits), pixelX, pixelY);
 							break;
+						}
 						default:
 							throw new IllegalArgumentException("AddHeightAction only takes raise or lower heightmodes");
 						}

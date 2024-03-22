@@ -14,7 +14,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.primitives.gl.BoxFillRenderer;
 import manatee.primitives.gl.BoxRenderer;
 import manatee.primitives.gl.ConeRenderer;
@@ -65,7 +65,7 @@ public class Primitives
 				3, 1, 2, 3, 0, 1 // B
 		};
 
-		shader = new PrimitiveShader("scene/primative.vsh", "scene/primative.fsh");
+		shader = new PrimitiveShader("shader/primative.vsh", "shader/primative.fsh");
 		
 		final int arrowHeadResolution = 6;
 
@@ -130,7 +130,7 @@ public class Primitives
 		Matrix3f rot = new Matrix3f();
 		
 		if (dir.z >= -.99f)
-			rot.lookAlong(dir, Vectors.Z_AXIS);
+			rot.lookAlong(dir, MCache.Z_AXIS);
 		
 		int id = cone.getVao();
 		Primitive head = new Primitive(id, start, start, rgb, rot);

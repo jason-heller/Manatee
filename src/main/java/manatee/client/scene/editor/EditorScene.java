@@ -85,7 +85,7 @@ import manatee.client.ui.ClientUI;
 import manatee.client.ui.FileChooser;
 import manatee.client.ui.UIBuilder;
 import manatee.maths.Maths;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.maths.geom.Plane;
 import manatee.primitives.Primitive;
 import manatee.primitives.Primitives;
@@ -214,7 +214,7 @@ public class EditorScene extends MapScene
 
 		if (TileFlags.IGNORE_HEIGHTFIELD.isSet(tileFlags))
 		{
-			float intersect = new Plane(Vectors.EMPTY, Vectors.Z_AXIS).raycast(camera.getPosition(), mouseRay);
+			float intersect = new Plane(MCache.EMPTY, MCache.Z_AXIS).raycast(camera.getPosition(), mouseRay);
 			mouseTerrainPos.set(mouseRay).mul(intersect).add(camera.getPosition());
 			cursorIgnoresHeight = true;
 			
@@ -485,19 +485,19 @@ public class EditorScene extends MapScene
 							onMouseHoverChange();
 						}
 						
-						Vector3f camLook = Vectors.X_AXIS;
+						Vector3f camLook = MCache.X_AXIS;
 						
 						// Eugh
 						if (camera.getLookVector().x <= -0.5)
-							camLook = Vectors.NEG_X_AXIS;
+							camLook = MCache.NEG_X_AXIS;
 						if (camera.getLookVector().y >= 0.5)
-							camLook = Vectors.Y_AXIS;
+							camLook = MCache.Y_AXIS;
 						if (camera.getLookVector().y <= -0.5)
-							camLook = Vectors.NEG_Y_AXIS;
+							camLook = MCache.NEG_Y_AXIS;
 						if (camera.getLookVector().z >= 0.5)
-							camLook = Vectors.Z_AXIS;
+							camLook = MCache.Z_AXIS;
 						if (camera.getLookVector().z <= -0.5)
-							camLook = Vectors.NEG_Z_AXIS;
+							camLook = MCache.NEG_Z_AXIS;
 						
 						if (hoveredEntity instanceof EditorEntity && ((EditorEntity)hoveredEntity).getName().equals(placeEntity.name))
 						{
@@ -516,7 +516,7 @@ public class EditorScene extends MapScene
 					if (entity instanceof Form)
 						entitySystem.addForm((Form) entity);
 					else
-						entitySystem.addEntity(entity);
+						entitySystem.addEntityNotRendered(entity);
 					
 					select(shiftHeld, entity);
 					
@@ -689,7 +689,7 @@ public class EditorScene extends MapScene
 					if (region == null)
 					{
 						canPlaceChunk = true;
-						placementCursor.setColor(Vectors.XY_AXIS);
+						placementCursor.setColor(MCache.XY_AXIS);
 						
 						int size = (geom.getResolution() - 1) * geom.getSpacing();
 						
@@ -706,7 +706,7 @@ public class EditorScene extends MapScene
 						canPlaceChunk = false;
 						//placementCursor.getStart().zero();
 						//placementCursor.getEnd().zero();
-						placementCursor.setColor(Vectors.X_AXIS);
+						placementCursor.setColor(MCache.X_AXIS);
 						
 						heightFieldPlaceBounds.zero();
 						
@@ -829,7 +829,7 @@ public class EditorScene extends MapScene
 		entity.getRotation().get(hoverMatrix).invert();
 		hover.getRotation().set(hoverMatrix);
 		
-		Primitive prim = Primitives.addBox(new Vector3f(entity.getPosition()), new Vector3f(entity.getBoundingBox().halfExtents), Vectors.X_AXIS);
+		Primitive prim = Primitives.addBox(new Vector3f(entity.getPosition()), new Vector3f(entity.getBoundingBox().halfExtents), MCache.X_AXIS);
 		prim.getRotation().set(hoverMatrix);
 	
 		selected.put(entity, prim);
@@ -897,7 +897,7 @@ public class EditorScene extends MapScene
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 			MapInfoLump mapInfo = new MapInfoLump(getMapName(), geom.getTilemap().getTileset(),
-					geom.getResolution(), geom.getSpacing(), this.getColor(), this.getLightColor(),
+					geom.getResolution(), geom.getSpacing(), this.getLightVector(), this.getColor(), this.getLightColor(),
 					this.getColor());
 
 			RegionLump[] regLump = RegionLump.load(this);
@@ -989,17 +989,17 @@ public class EditorScene extends MapScene
 			{
 				EditorEntity entity;
 				
-				if(entityData.name.endsWith("Light"))
+				/*if(entityData.name.endsWith("Light"))
 				{
 					entity = new EditorLightEntity(this, entityData.name, entityData.position,
 							entityData.color, getMesh(entityData.mesh), getTexture(entityData.texture),
 							getModel(entityData.model));
 				} else
-				{
+				{*/
 					entity = new EditorEntity(this, entityData.name, entityData.position,
 								entityData.color, getMesh(entityData.mesh), getTexture(entityData.texture),
 								getModel(entityData.model), entityData.shader);
-				}
+				//}
 
 				entity.setGraphicReferences(entityData.mesh, entityData.texture, entityData.model, entityData.lod);
 				entity.setTags(entityData.tags);
@@ -1010,6 +1010,24 @@ public class EditorScene extends MapScene
 				entity.onTranslate();
 				entity.onRotate();
 				entity.onScale();
+				entity.onColorChange();
+
+				entitySystem.addForm(entity);
+			}
+			
+			// Lights
+			LightLump[] lightDataArr = mapData.lights;
+			
+			for (LightLump lightdata : lightDataArr)
+			{
+				//levlightdata.process(geom);
+				EditorEntity entity = new EditorLightEntity(this, "PointLight", lightdata.position,
+						lightdata.color, null, getTexture("light"),
+						null);
+				
+				entity.setGraphicReferences(null, "light", null, false);
+
+				entity.onTranslate();
 				entity.onColorChange();
 
 				entitySystem.addForm(entity);
@@ -1153,7 +1171,7 @@ public class EditorScene extends MapScene
 		return history;
 	}
 
-	public void getHeightMode(HeightToolMode mode)
+	public void setHeightMode(HeightToolMode mode)
 	{
 		this.heightMode = mode;
 	}

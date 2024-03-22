@@ -18,6 +18,7 @@ import lwjgui.scene.layout.OpenGLPane;
 import lwjgui.scene.layout.StackPane;
 import lwjgui.scene.layout.VBox;
 import lwjgui.scene.layout.floating.FloatingPane;
+import manatee.client.ui.control.InventoryBox;
 
 public enum TagData
 {
@@ -47,7 +48,9 @@ public enum TagData
 	TEXTAREA(TextArea.class, true),
 	TEXTFIELD(TextField.class, true),
 	SLIDER(Slider.class, true),
-	SPINBOX(CheckBox.class, "spin", true);
+	SPINBOX(CheckBox.class, "spin", true),
+	
+	ITEMBOX(InventoryBox.class, true);
 	
 	private boolean selfClosing;
 	private Class<?> corrospondingTo = null;

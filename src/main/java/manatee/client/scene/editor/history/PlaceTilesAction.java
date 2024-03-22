@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.joml.Vector2i;
 
-import manatee.client.dev.Dev;
 import manatee.client.entity.SpatialEntity;
 import manatee.client.entity.stock.TileEntity;
 import manatee.client.map.MapGeometry;
@@ -65,10 +64,16 @@ public class PlaceTilesAction implements ReversableAction
 		if (oldTileId == newTileId)
 			return;
 		
-		PlaceTileAction action = new PlaceTileAction(region, entity, tx, ty, newTileId, oldTileId);
-		batch.add(action);
-		
-		action.act();
+		try {
+			PlaceTileAction action = new PlaceTileAction(region, entity, tx, ty, newTileId, oldTileId);
+			batch.add(action);
+			
+			action.act();
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+			System.err.println("Array index out of bounds: " + tx + ", " + ty + " reg: " + region.getPosition());
+		}
 	}
 
 	@Override

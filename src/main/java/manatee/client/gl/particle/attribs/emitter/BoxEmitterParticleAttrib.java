@@ -25,7 +25,7 @@ public class BoxEmitterParticleAttrib implements IParticleAttrib
 		float y = origin.y + (((float)Math.random()) * bounds.y);
 		float z = origin.z + (((float)Math.random()) * bounds.z);
 		
-		pos.set(x, y, z);
+		pos.add(x, y, z);
 	}
 
 	@Override

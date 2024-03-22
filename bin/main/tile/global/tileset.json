@@ -49,7 +49,7 @@
 		"name": "Tree Stem",
 		"mesh": "tree_stem0",
 		"texture": "bark0",
-		"flags": ["NATURE"]
+		"flags": ["NATURE", "SOLID"]
 	},
 	{
 		"name": "Tree Folige (Static)",

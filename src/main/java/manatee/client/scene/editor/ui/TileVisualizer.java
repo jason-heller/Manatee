@@ -17,7 +17,7 @@ import manatee.client.gl.renderer.BaseRenderer;
 import manatee.client.map.tile.Tile;
 import manatee.maths.Maths;
 import manatee.maths.MatrixMath;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class TileVisualizer extends BaseRenderer implements Renderer
 {
@@ -41,7 +41,7 @@ public class TileVisualizer extends BaseRenderer implements Renderer
 		
 		pane.getChildren().add(ogl);
 		
-		shader = new Shader("scene/tile/generic.vsh", "scene/tile/generic.fsh");
+		shader = new Shader("shader/tile/generic.vsh", "shader/tile/generic.fsh");
 		
 		matrix = new Matrix4f();
 		resetView();
@@ -103,7 +103,7 @@ public class TileVisualizer extends BaseRenderer implements Renderer
 		
 		shader.setTexture("f_Diffuse", mesh.getTexture(), 0);
 		shader.setUniform("v_Position", 0, 0);
-		shader.setUniform("v_AmbientColor", Vectors.ONE);
+		shader.setUniform("v_AmbientColor", MCache.ONE);
 		shader.setUniform("v_AmbientVector", CAM_LIGHT);
 		shader.setUniform("v_LightNum", 0);
 		

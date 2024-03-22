@@ -46,23 +46,32 @@ public class ParticleManager
 	
 	public static Map<String, String> meshes = new LinkedHashMap<>();
 	public static Map<String, Integer> meshIndices = new HashMap<>();
+	public static Map<String, ITexture> textures = new LinkedHashMap<>();
+	public static Map<String, Integer> textureAtlasSizes = new HashMap<>();
 	
 	public ParticleManager()
 	{
 		quadRenderer = new QuadParticleRenderer();
 		meshRenderer = new MeshParticleRenderer();
 		
-		initMeshes();
+		initAssets();
 	}
 	
-	private void initMeshes()
+	private void initAssets()
 	{
 		meshes.clear();
 
 		putMesh("cube", "mesh/particle/cube.obj");
 		putMesh("smoke", "mesh/particle/sphere.obj");
-		putMesh("poo", "mesh/particle/poo.obj");
+		
+		putTexture("flame", "texture/particle/flame.png", 2);
 			
+	}
+	
+	private void putTexture(String key, String value, int atlasWidth)
+	{
+		textures.put(key, Texture2D.load(value));
+		textureAtlasSizes.put(key, atlasWidth);
 	}
 	
 	private void putMesh(String key, String value)

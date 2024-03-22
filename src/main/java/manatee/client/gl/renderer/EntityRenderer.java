@@ -1,7 +1,5 @@
 package manatee.client.gl.renderer;
 
-import java.awt.Window;
-
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -10,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import manatee.cache.definitions.mesh.IMesh;
 import manatee.cache.definitions.texture.ITexture;
 import manatee.client.Client;
-import manatee.client.Time;
 import manatee.client.entity.Form;
 import manatee.client.gl.Shader;
 import manatee.client.gl.mesh.EntityShaderTarget;
@@ -18,7 +15,8 @@ import manatee.client.map.MapGeometry;
 import manatee.client.map.MapRegion;
 import manatee.client.scene.MapScene;
 import manatee.client.scene.WindHandler;
-import manatee.maths.Vectors;
+import manatee.client.ui.ClientRenderer;
+import manatee.maths.MCache;
 
 public class EntityRenderer
 {
@@ -29,8 +27,9 @@ public class EntityRenderer
 	public EntityRenderer(Vector3f lightColor, Vector3f lightVector)
 	{
 		shaders = new Shader[] {
-				new Shader("scene/entity/entity.vsh", "scene/entity/entity.fsh"),
-				new Shader("scene/entity/e_foliage.vsh", "scene/entity/e_foliage.fsh")
+				new Shader("shader/entity/static.vsh", "shader/entity/static.fsh"),
+				new Shader("shader/entity/foliage.vsh", "shader/entity/foliage.fsh"),
+				new Shader("shader/entity/anim.vsh", "shader/entity/anim.fsh")
 		};
 		
 		this.lightColor = lightColor;
@@ -65,6 +64,7 @@ public class EntityRenderer
 
 	public void drawEntity(Vector3f cameraPos, MapGeometry geom, Form form)
 	{
+		
 		if (!form.isVisible())
 			return;
 
@@ -76,12 +76,12 @@ public class EntityRenderer
 		q.transform(localLightVec);
 		
 		activeShader.setUniform("v_Diffuse", form.getColor());
-		if (form.isFullbright())
+		if (form.isFullbright() || ClientRenderer.fullbright)
 		{
 			Vector3f light = new Vector3f(Client.scene().getCamera().getLookVector());
 			light.negate();
 			activeShader.setUniform("v_LightNum", 0);
-			activeShader.setUniform("v_AmbientColor", Vectors.ONE);
+			activeShader.setUniform("v_AmbientColor", MCache.ONE);
 			activeShader.setUniform("v_AmbientVector", light);
 		}
 		else
@@ -94,8 +94,8 @@ public class EntityRenderer
 				activeShader.setUniform("v_LightNum", 0);
 		}
 
-		int nMeshes = form.getNumMeshes();
-
+		int nMeshes = form.getModel().getNumMeshes();
+		
 		if (form.hasLod())
 		{
 			float distSqr = form.getPosition().distanceSquared(cameraPos);
@@ -109,11 +109,17 @@ public class EntityRenderer
 		}
 		else
 		{
+			if (form.getModel().isAnimated())
+			{
+				activeShader.setUniform("v_BonesMatrices", form.getAnimator().getCurrentFrame().boneMatrices);
+			}
+			
 			for (int i = 0; i < nMeshes; i++)
 			{
 				IMesh mesh = form.getMesh(i);
 				ITexture texture = form.getTexture(i);
 				activeShader.setTexture("f_Diffuse", texture, 0);
+				activeShader.setUniform("v_Color", mesh.getColor());
 
 				drawMeshIndexed(mesh);
 			}

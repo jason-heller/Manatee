@@ -1,5 +1,6 @@
 package manatee.client.gl;
 
+import java.nio.FloatBuffer;
 import java.util.logging.Logger;
 
 import org.joml.Matrix4f;
@@ -9,6 +10,7 @@ import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 
 import manatee.cache.definitions.loader.ShaderLoader;
 import manatee.cache.definitions.texture.ITexture;
@@ -145,6 +147,20 @@ public class Shader
 	public void setUniformArray3f(String name, float[] value)
 	{
 		GL20.glUniform3fv(getUniformLocation(name), value);
+	}
+
+	public void setUniform(String name, Matrix4f[] matrices)
+	{
+		try (MemoryStack stack = MemoryStack.stackPush())
+		{
+			int length = matrices != null ? matrices.length : 0;
+			FloatBuffer fb = stack.mallocFloat(16 * length);
+			for (int i = 0; i < length; i++)
+			{
+				matrices[i].get(16 * i, fb);
+			}
+			GL20.glUniformMatrix4fv(getUniformLocation(name), false, fb);
+		}
 	}
 
 	public void setTexture(String name, ITexture texture, int activeTexture)

@@ -52,7 +52,7 @@ public class ParticleAtlas
 		this.lit = lit;
 	}
 
-	public void getTextureCoords(int orderIndex, float lifeFactor, float[] data, int index)
+	public void getTextureCoords(float lifeFactor, float[] data, int index)
 	{
 		int nFrames = (order * order) - 1;
 		

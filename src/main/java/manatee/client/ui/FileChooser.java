@@ -108,6 +108,9 @@ public class FileChooser
 						
 						EventHandler<ActionEvent> executeEvent = (e) -> {
 							
+							if (FileChooser.fileName == null)
+								return;
+							
 							Path filePath = Paths.get(FileChooser.fileName);
 		
 							if (Files.isDirectory(filePath))

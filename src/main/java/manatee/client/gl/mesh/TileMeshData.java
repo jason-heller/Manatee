@@ -18,7 +18,7 @@ import manatee.client.map.MapGeometry;
 import manatee.client.map.tile.TileFlags;
 import manatee.client.scene.GameMap;
 import manatee.maths.Maths;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.maths.geom.Plane;
 import manatee.maths.geom.Triangle;
 import manatee.maths.geom.TriangleClipper;
@@ -195,7 +195,7 @@ public class TileMeshData extends AssimpModel
 			return new Vector3f(color.r(), color.g(), color.b());
 		}
 		
-		return Vectors.ONE;
+		return MCache.ONE;
 	}
 	
 	private void addVertex(ArrayList<Float> vertices, Vector3f position, Vector2f texCoord, Vector3f normal, Vector3f color, MapGeometry geom, int flags)

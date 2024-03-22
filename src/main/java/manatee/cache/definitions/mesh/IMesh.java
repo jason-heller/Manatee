@@ -11,4 +11,6 @@ public interface IMesh extends IBindableAsset
 	public Vector3f getMax();
 	
 	public Vector3f getMin();
+	
+	public Vector3f getColor();
 }

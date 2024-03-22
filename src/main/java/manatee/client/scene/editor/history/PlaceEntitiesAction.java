@@ -64,7 +64,7 @@ public class PlaceEntitiesAction implements ReversableAction
 			return;
 		}
 		
-		entitySystem.addEntity(entity);
+		entitySystem.addEntityNotRendered(entity);
 	}
 	
 	private void remove(Entity entity)

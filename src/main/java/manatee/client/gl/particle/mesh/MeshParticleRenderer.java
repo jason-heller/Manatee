@@ -60,7 +60,7 @@ public class MeshParticleRenderer
 
 	public MeshParticleRenderer()
 	{
-		shader = new Shader("scene/particle/mesh.vert", "scene/particle/mesh.frag");
+		shader = new Shader("shader/particle/mesh.vert", "shader/particle/mesh.frag");
 	}
 	
 	public int addMesh(FloatBuffer vertices, IntBuffer indices)

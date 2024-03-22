@@ -12,7 +12,7 @@ import manatee.client.map.ISceneDrawable;
 import manatee.client.map.MapGeometry;
 import manatee.client.map.MapRegion;
 import manatee.client.map.tile.Tilemap;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.maths.geom.Plane;
 
 public class GameMap implements ISceneDrawable
@@ -108,7 +108,7 @@ public class GameMap implements ISceneDrawable
 
 		if (rayPoint == null)
 		{
-			float intersect = new Plane(Vectors.EMPTY, Vectors.Z_AXIS).raycast(origin, direction);
+			float intersect = new Plane(MCache.EMPTY, MCache.Z_AXIS).raycast(origin, direction);
 			
 			if (!Float.isNaN(intersect))
 				rayPoint = new Vector3f(direction).mul(intersect).add(origin);

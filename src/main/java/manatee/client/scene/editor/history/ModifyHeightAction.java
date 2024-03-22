@@ -9,6 +9,7 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
+import manatee.cache.definitions.field.DataFieldf;
 import manatee.client.map.MapGeometry;
 import manatee.client.map.MapRegion;
 import manatee.client.scene.editor.HeightToolMode;
@@ -56,6 +57,9 @@ public class ModifyHeightAction implements IHeightAction
 			
 			for(MapRegion region : regions)
 			{
+				if (!region.containsPoint(change))
+					continue;
+				
 				region.getHeightData().set(value.y, change.x, change.y);
 				geom.rebuild(region);
 			}
@@ -74,6 +78,9 @@ public class ModifyHeightAction implements IHeightAction
 			
 			for(MapRegion region : regions)
 			{
+				if (!region.containsPoint(change))
+					continue;
+				
 				region.getHeightData().set(value.x, change.x, change.y);
 				geom.rebuild(region);
 			}
@@ -121,6 +128,10 @@ public class ModifyHeightAction implements IHeightAction
 						if (pixelX < fx1 || pixelY < fy1 || pixelX >= fx2 || pixelY >= fy2)
 							continue;
 						
+						DataFieldf df = region.getHeightData();
+						float dfValue = df.get(pixelX, pixelY);
+						int originalTexBits = Float.floatToIntBits(dfValue);
+						
 						if (!fields.contains(region))
 							fields.add(region);
 						
@@ -131,8 +142,9 @@ public class ModifyHeightAction implements IHeightAction
 						
 						if (!changes.containsKey(change))
 						{
-							float originalHeight = region.getHeightData().get(pixelX, pixelY);
+							float originalHeight = df.get(pixelX, pixelY);
 							heightData = new Vector2f(originalHeight, originalHeight);
+							
 							changes.put(change, heightData);
 						}
 						else
@@ -145,27 +157,29 @@ public class ModifyHeightAction implements IHeightAction
 						switch(mode)
 						{
 						case RAISE:
-							value = delta * strength;
-							region.getHeightData().add(value, pixelX, pixelY);
-							heightData.y += value;
+							//value = delta * strength;
+							//df.add(value, pixelX, pixelY);
+							//heightData.y += value;
 							break;
 							
 						case LOWER:
-							value = -delta * strength;
-							region.getHeightData().add(value, pixelX, pixelY);
-							heightData.y += value;
+							//value = -delta * strength;
+							//df.add(value, pixelX, pixelY);
+							//heightData.y += value;
 							break;
 							
 						case SMOOTH:
-							float height = region.getHeightData().get(pixelX, pixelY);
+							float height = df.get(pixelX, pixelY);
 							value = Maths.lerp(height, originHeight, .1f * strength);
+							value = cullTexBits(value);
 							
-							region.getHeightData().set(value, pixelX, pixelY);
+							df.set(value, pixelX, pixelY);
 							heightData.y = value;
 							break;
 							
 						case FLATTEN:
-							region.getHeightData().set(originHeight, pixelX, pixelY);
+							originHeight = cullTexBits(originHeight);
+							df.set(originHeight, pixelX, pixelY);
 							heightData.y = originHeight;
 							break;
 							
@@ -173,9 +187,28 @@ public class ModifyHeightAction implements IHeightAction
 							break;
 							
 						case ZERO:
-							region.getHeightData().set(0f, pixelX, pixelY);
+							df.set(0f, pixelX, pixelY);
 							heightData.y = 0f;
 							break;
+
+						case PAINT_TEXTURE:
+						{
+							int paintValue = Math.min((originalTexBits & 7) + (int)(strength * delta * radius), 7);
+							float v = Float.intBitsToFloat((originalTexBits & ~7) | paintValue);
+							df.set(v, pixelX, pixelY);
+							heightData.y = v;
+							break;
+						}
+						
+						case ERASE_TEXTURE:
+						{
+							int paintValue = Math.max((originalTexBits & 7) - (int)(strength * delta * radius), 0);
+							float v = Float.intBitsToFloat((originalTexBits & ~7) | paintValue);
+							df.set(v, pixelX, pixelY);
+							heightData.y = v;
+							break;
+						}
+						
 						}
 					}
 					}
@@ -184,6 +217,12 @@ public class ModifyHeightAction implements IHeightAction
 		
 		return fields;
     }
+	
+	private float cullTexBits(float v)
+	{
+		return Float.intBitsToFloat((Float.floatToIntBits(v) & ~7));
+	}
+
 
 	@Override
 	public void updateTilesets()

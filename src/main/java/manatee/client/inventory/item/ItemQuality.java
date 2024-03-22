@@ -1,6 +1,22 @@
 package manatee.client.inventory.item;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum ItemQuality
 {
-	STOCK, COMMON, UNCOMMON, VINTAGE, UNUSUAL;
+
+	@SerializedName("STOCK")
+	STOCK,
+
+	@SerializedName("COMMON")
+	COMMON,
+
+	@SerializedName("UNCOMMON")
+	UNCOMMON,
+
+	@SerializedName("VINTAGE")
+	VINTAGE,
+
+	@SerializedName("UNUSUAL")
+	UNUSUAL;
 }

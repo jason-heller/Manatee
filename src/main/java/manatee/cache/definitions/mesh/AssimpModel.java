@@ -10,6 +10,8 @@ import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.AIVector3D.Buffer;
 import org.lwjgl.system.MemoryUtil;
 
+import manatee.maths.MCache;
+
 public class AssimpModel
 {
 	protected AIMesh[] meshes;
@@ -140,7 +142,7 @@ public class AssimpModel
 		vertices.flip();
 		indices.flip();
 		
-		GenericMesh genericMesh = new GenericMesh(vertices, indices);
+		GenericMesh genericMesh = new GenericMesh(vertices, indices, MCache.ONE);
 		
 		MemoryUtil.memFree(vertices);
 		MemoryUtil.memFree(indices);

@@ -22,6 +22,7 @@ import manatee.client.map.tile.Tile;
 import manatee.client.map.tile.TileFlags;
 import manatee.client.map.tile.TileUpdate;
 import manatee.client.map.tile.Tilemap;
+import manatee.maths.MCache;
 import manatee.maths.geom.Plane;
 
 public class TileFieldMesh extends BaseMesh
@@ -383,5 +384,11 @@ public class TileFieldMesh extends BaseMesh
 	public TileShaderTarget getShaderTarget()
 	{
 		return shaderTarget;
+	}
+	
+	@Override
+	public Vector3f getColor()
+	{
+		return MCache.ONE;
 	}
 }

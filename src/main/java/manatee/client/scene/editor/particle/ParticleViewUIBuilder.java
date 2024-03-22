@@ -38,6 +38,7 @@ import lwjgui.scene.layout.Pane;
 import lwjgui.scene.layout.VBox;
 import lwjgui.scene.layout.floating.FloatingPane;
 import lwjgui.style.Percentage;
+import manatee.cache.definitions.texture.ITexture;
 import manatee.client.Client;
 import manatee.client.dev.Dev;
 import manatee.client.gl.camera.ControllableCamera;
@@ -194,19 +195,33 @@ public class ParticleViewUIBuilder implements UIBuilder
 		
 		{
 			ComboBox<String> combo = new ComboBox<String>();
-	
+			
 			for(String s : ParticleManager.meshes.keySet())
+				combo.getItems().add(s);
+			
+			for(String s : ParticleManager.textures.keySet())
 				combo.getItems().add(s);
 			
 			combo.setOnAction((e) -> {
 				ParticleSystem ps = scene.getParticleManager().getParticleSystem(scene.particleType);
 				if (ps != null)
 				{
-					int mid = ParticleManager.meshIndices.get(combo.getValue());
-					((MeshParticleSystem)ps).setMeshIndex(mid);
-					scene.getParticleManager().removeSystem(scene.particleType);
-
-					scene.getParticleManager().addSystem(scene.particleType, mid, ps.getAttributes());
+					String value = combo.getValue();
+					
+					if (ParticleManager.textures.containsKey(value))
+					{
+						ITexture tex = ParticleManager.textures.get(value);
+						int atlasWidth = ParticleManager.textureAtlasSizes.get(value);
+						scene.getParticleManager().removeSystem(scene.particleType);
+						scene.getParticleManager().addSystem(scene.particleType, tex, atlasWidth, true, false, ps.getAttributes());
+					}
+					else
+					{
+						int mid = ParticleManager.meshIndices.get(value);
+						((MeshParticleSystem)ps).setMeshIndex(mid);
+						scene.getParticleManager().removeSystem(scene.particleType);
+						scene.getParticleManager().addSystem(scene.particleType, mid, ps.getAttributes());
+					}
 					scene.resetEmitters();
 				}
 			});
@@ -313,7 +328,7 @@ public class ParticleViewUIBuilder implements UIBuilder
 		{
 			Button b = new Button("Save");
 			b.setOnAction((e) -> {
-				scene.save("src/main/resources/scene/particle/particles.txt");
+				scene.save("src/main/resources/data/particles.txt");
 			});
 			
 			box.getChildren().add(b);

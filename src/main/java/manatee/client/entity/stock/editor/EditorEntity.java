@@ -18,7 +18,7 @@ import manatee.client.gl.mesh.EntityShaderTarget;
 import manatee.client.scene.GlobalAssets;
 import manatee.client.scene.MapScene;
 import manatee.client.scene.editor.EditorScene;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class EditorEntity extends BillboardForm
 {
@@ -36,6 +36,7 @@ public class EditorEntity extends BillboardForm
 		setColor(color);
 		
 		this.scene = scene;
+		
 		
 		setName(name);
 		
@@ -66,7 +67,6 @@ public class EditorEntity extends BillboardForm
 			this.setFullbright(true);
 			this.setVisible(true);
 		}
-		
 	}
 
 	@Override
@@ -119,37 +119,40 @@ public class EditorEntity extends BillboardForm
 	
 	private void setMesh(IMesh mesh)
 	{
-		if (this.meshes == null && mesh != null && this.boundingBox.halfExtents.equals(Vectors.EMPTY))
+		if (this.model == null && mesh != null && this.boundingBox.halfExtents.equals(MCache.EMPTY))
 		{
 			Vector3f halfExtents = new Vector3f(mesh.getMax()).sub(mesh.getMin()).mul(0.5f);
 
 			this.boundingBox.halfExtents.set(halfExtents);
 		}
 		
+		if (model == null)
+			model = new Model(new IMesh[] {null}, new ITexture[] {GlobalAssets.MISSING_TEX});
+		
 		if (mesh == null && this.isVisible())
 		{
 			boundingBox.halfExtents.set(.5f, .5f, .5f);
-			this.textures = new ITexture[] {NO_TEX};
+			model.setTextures(new ITexture[] {NO_TEX});
 			
 			this.setVisible(false);
 		}
 		
 		if (mesh != null)
-			this.meshes = new IMesh[] {mesh};
+			model.setMeshes(new IMesh[] {mesh});
 	}
 	
 	private void setTexture(ITexture texture)
 	{
-		if (meshes != null && meshes[0] == GlobalAssets.MISSING_MESH)
+		if (model.getMeshes()[0] == GlobalAssets.MISSING_MESH)
 		{
-			this.textures = new ITexture[] {GlobalAssets.NO_TEX};
+			model.setTextures(new ITexture[] {GlobalAssets.NO_TEX});
 			return;
 		}
 		
 		if (texture == null)
 			texture = GlobalAssets.MISSING_TEX;
 		
-		this.textures = new ITexture[] {texture};
+		model.setTextures(new ITexture[] {texture});
 	}
 	
 	public String getName()
@@ -191,7 +194,7 @@ public class EditorEntity extends BillboardForm
 		}
 	}
 
-	public String getModel()
+	public String getModelPath()
 	{
 		return modelPath;
 	}
@@ -222,10 +225,9 @@ public class EditorEntity extends BillboardForm
 	}
 	
 	// TODO: This is gross - needs refactor
-	@Override
 	public int getNumMeshes()
 	{
-		return meshes == null ? 0 : meshes.length;
+		return model.getNumMeshes();
 	}
 
 	public void onScale()

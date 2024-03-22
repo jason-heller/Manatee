@@ -3,7 +3,7 @@ package manatee.maths.geom;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 @Deprecated
 public class BoundingBoxOld {
@@ -23,9 +23,9 @@ public class BoundingBoxOld {
 
 	public BoundingBoxOld(float x, float y, float z, float w, float h, float l) {
 		this.center = new Vector3f(x, y, z);
-		this.X = new Vector3f(Vectors.X_AXIS);
-		this.Y = new Vector3f(Vectors.Y_AXIS);
-		this.Z = new Vector3f(Vectors.Z_AXIS);
+		this.X = new Vector3f(MCache.X_AXIS);
+		this.Y = new Vector3f(MCache.Y_AXIS);
+		this.Z = new Vector3f(MCache.Z_AXIS);
 		this.halfSize = new Vector3f(w, h, l);
 		
 		xBounds.set(X).mul(halfSize.x);
@@ -35,9 +35,9 @@ public class BoundingBoxOld {
 
 	public BoundingBoxOld(Vector3f center, float w, float h, float l) {
 		this.center = center;
-		this.X = new Vector3f(Vectors.X_AXIS);
-		this.Y = new Vector3f(Vectors.Y_AXIS);
-		this.Z = new Vector3f(Vectors.Z_AXIS);
+		this.X = new Vector3f(MCache.X_AXIS);
+		this.Y = new Vector3f(MCache.Y_AXIS);
+		this.Z = new Vector3f(MCache.Z_AXIS);
 		this.halfSize = new Vector3f(w, h, l);
 		
 		xBounds.set(X).mul(halfSize.x);
@@ -52,9 +52,9 @@ public class BoundingBoxOld {
 	public BoundingBoxOld(Vector3f center, Vector3f bounds) {
 		this.halfSize = bounds;
 		this.center = center;
-		this.X = new Vector3f(Vectors.X_AXIS);
-		this.Y = new Vector3f(Vectors.Y_AXIS);
-		this.Z = new Vector3f(Vectors.Z_AXIS);
+		this.X = new Vector3f(MCache.X_AXIS);
+		this.Y = new Vector3f(MCache.Y_AXIS);
+		this.Z = new Vector3f(MCache.Z_AXIS);
 		
 		xBounds.set(X).mul(halfSize.x);
 		yBounds.set(Y).mul(halfSize.y);
@@ -198,9 +198,9 @@ public class BoundingBoxOld {
 
 	public void setRotation(Quaternionf rot) {
 
-		X.set(Vectors.X_AXIS).rotate(rot);
-		Y.set(Vectors.Y_AXIS).rotate(rot);
-		Z.set(Vectors.Z_AXIS).rotate(rot);
+		X.set(MCache.X_AXIS).rotate(rot);
+		Y.set(MCache.Y_AXIS).rotate(rot);
+		Z.set(MCache.Z_AXIS).rotate(rot);
 		
 		xBounds.set(X).mul(halfSize.x);
 		yBounds.set(Y).mul(halfSize.y);

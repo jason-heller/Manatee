@@ -7,24 +7,28 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import manatee.cache.definitions.texture.ITexture;
 import manatee.client.gl.camera.ICamera;
 import manatee.client.gl.camera.TrackingCamera;
+import manatee.client.gl.particle.ParticleAtlas;
 import manatee.client.gl.particle.ParticleEmitter;
 import manatee.client.gl.particle.ParticleManager;
 import manatee.client.gl.particle.ParticleSystem;
 import manatee.client.gl.particle.attribs.IParticleAttrib;
 import manatee.client.gl.particle.mesh.MeshParticleSystem;
+import manatee.client.gl.particle.quad.QuadParticleSystem;
 import manatee.client.map.tile.Tile;
 import manatee.client.scene.Assets;
 import manatee.client.scene.MapScene;
 import manatee.client.ui.ClientUI;
 import manatee.client.ui.UIBuilder;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.primitives.Primitives;
 
 public class ParticleViewScene extends MapScene
@@ -64,7 +68,7 @@ public class ParticleViewScene extends MapScene
 	{
 		super.init(ui);
 
-		emitters.add(new ParticleEmitter(Vectors.EMPTY, pps, ppsVariance, ppe, true));
+		emitters.add(new ParticleEmitter(MCache.EMPTY, pps, ppsVariance, ppe, true));
 
 		// Load particles
 
@@ -74,7 +78,7 @@ public class ParticleViewScene extends MapScene
 
 		this.getColor().set(.5f, 0, .5f, 1f);
 
-		Primitives.addBox(Vectors.EMPTY, new Vector3f(5, 5, 0));
+		Primitives.addBox(MCache.EMPTY, new Vector3f(5, 5, 0));
 	}
 
 	public void resetEmitters()
@@ -105,7 +109,7 @@ public class ParticleViewScene extends MapScene
 		super.setCamera(camera);
 
 		if (camera instanceof TrackingCamera)
-			((TrackingCamera) camera).setTrackingTarget(Vectors.EMPTY);
+			((TrackingCamera) camera).setTrackingTarget(MCache.EMPTY);
 	}
 
 	@Override
@@ -162,9 +166,27 @@ public class ParticleViewScene extends MapScene
 				sb.append(name).append("{");
 				
 				sb.append("\n\t").append("Emission; ").append(pps).append("; ").append(ppe).append("; ").append(ppsVariance);
+				
+				if (ps instanceof MeshParticleSystem)
 				{
 					int index = ((MeshParticleSystem) ps).getMeshIndex();
 					sb.append("\n\t").append("Mesh; ").append(index);
+				}
+				else
+				{
+					ParticleAtlas atlas = ((QuadParticleSystem) ps).getParticleAtlas();
+					
+					String atlasName = "";
+					for(Entry<String, ITexture> entry : ParticleManager.textures.entrySet())
+					{
+						if (entry.getValue() == atlas.getTexture())
+						{
+							atlasName = entry.getKey();
+							break;
+						}
+					}
+					
+					sb.append("\n\t").append("Atlas; ").append(atlasName);
 				}
 				
 				//sb.append(ps.getAttributes().length);

@@ -14,31 +14,31 @@
 		"mesh": "lamp1",
 		"texture": "lamp1",
 		"shader": "TRANSLUCENT",
-		"flags": ["BUILDING"]
+		"flags": ["BUILDING", "SOLID"]
 	},
 	{
 		"name": "Cantilevered Lamp Post +Y",
 		"mesh": "lamp0",
 		"texture": "lamp0",
-		"flags": ["BUILDING", "FLIP_Y"]
+		"flags": ["BUILDING", "FLIP_Y", "SOLID"]
 	},
 	{
 		"name": "Cantilevered Lamp Post -Y",
 		"mesh": "lamp0",
 		"texture": "lamp0",
-		"flags": ["BUILDING"]
+		"flags": ["BUILDING", "SOLID"]
 	},
 	{
 		"name": "Cantilevered Lamp Post +X",
 		"mesh": "lamp0",
 		"texture": "lamp0",
-		"flags": ["BUILDING", "ROTATE_90CW"]
+		"flags": ["BUILDING", "ROTATE_90CW", "SOLID"]
 	},
 	{
 		"name": "Cantilevered Lamp Post -X",
 		"mesh": "lamp0",
 		"texture": "lamp0",
-		"flags": ["BUILDING", "ROTATE_90CW", "FLIP_Y"]
+		"flags": ["BUILDING", "ROTATE_90CW", "FLIP_Y", "SOLID"]
 	},
 	{
 		"name": "Cobble Path",
@@ -47,5 +47,11 @@
 		"corners": "floor_corner",
 		"flipCorners": true,
 		"flags": ["FLOOR_FLAGS", "BUILDING"]
+	},
+	{
+		"name": "Campfire",
+		"mesh": "campfire",
+		"texture": "campfire",
+		"flags": ["NATURE"]
 	}
 ]

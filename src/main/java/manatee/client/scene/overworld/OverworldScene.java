@@ -3,24 +3,26 @@ package manatee.client.scene.overworld;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import manatee.client.entity.stock.EquipmentEntity;
 import manatee.client.gl.camera.ICamera;
 import manatee.client.gl.camera.TrackingCamera;
+import manatee.client.input.Input;
+import manatee.client.input.KeybindsInternal;
 import manatee.client.map.tile.Tile;
 import manatee.client.scene.Assets;
+import manatee.client.scene.MapScene;
 import manatee.client.scene.PlayableScene;
 import manatee.client.ui.ClientUI;
 import manatee.client.ui.UIBuilder;
 
 public class OverworldScene extends PlayableScene
 {
-	protected String mapName = "src/main/resources/maps/level.map";
-
 	@Override
 	public void init(ClientUI ui)
 	{
 		super.init(ui);
 		
-		this.importMap(mapName);
+		this.importMap("src/main/resources/maps/" + MapScene.mapName + ".map");
 		
 		setCamera(new TrackingCamera());
 	}
@@ -47,6 +49,13 @@ public class OverworldScene extends PlayableScene
 		
 		if (dist >= 1600)
 			return;
+		
+		// For testing - remove me
+		if (Input.isHeld(KeybindsInternal.CTRL))
+		{
+			player.getPosition().set(mouseWorldPos);
+			return;
+		}
 		
 		Vector2f[] path = map.getGeometry().createPath(
 				position.x, position.y,

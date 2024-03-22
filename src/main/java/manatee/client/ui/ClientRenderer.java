@@ -12,6 +12,7 @@ import lwjgui.paint.Color;
 import lwjgui.scene.Context;
 import lwjgui.scene.Node;
 import lwjgui.scene.Window;
+import manatee.client.Client;
 import manatee.client.Time;
 import manatee.client.dev.Command;
 import manatee.client.dev.DeveloperConsole;
@@ -19,12 +20,14 @@ import manatee.client.gl.camera.ICamera;
 import manatee.client.gl.renderer.nvg.NVGObject;
 import manatee.client.scene.IScene;
 import manatee.client.scene.MapScene;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 import manatee.primitives.Primitive;
 import manatee.primitives.Primitives;
 
 public class ClientRenderer implements Renderer
 {
+	public static boolean fullbright;
+
 	private IScene scene;
 	
 	private boolean cullFace = true;
@@ -41,6 +44,8 @@ public class ClientRenderer implements Renderer
 		Command.add("gl_cullface", Command.BOOL_SYNTAX, this, "setCullFace", false);
 		Command.add("uidebug", Command.BOOL_SYNTAX, this, "setDebugUIInfo", false);
 		Command.add("show_info", Command.BOOL_SYNTAX, this, "setDebugSceneInfo", false);
+		
+		Command.add("render_fullbright", Command.BOOL_SYNTAX, this, "setFullbright", false);
 	}
 
 	@Override
@@ -119,10 +124,14 @@ public class ClientRenderer implements Renderer
 		
 		if (scene instanceof MapScene)
 		{
-			Vector3f v = ((MapScene)scene).getMouseWorldPosition();
+			Vector3f lightVec = ((MapScene)Client.scene()).getLightVector();
+			NanoVG.nvgText(ctx, 10, 60 + offset, "LightVec: " + String.format("%.1f", lightVec.x) + " "
+					+ String.format("%.1f", lightVec.y) + " " + String.format("%.1f", lightVec.z));
+
+			Vector3f v = ((MapScene) scene).getMouseWorldPosition();
 			if (v != null)
-				NanoVG.nvgText(ctx, 10, 60 + offset, String.format("%.1f", v.x) + " " + String.format("%.1f", v.y) + " "
-						+ String.format("%.1f", v.z));
+				NanoVG.nvgText(ctx, 10, 80 + offset, String.format("%.0f", v.x) + " " + String.format("%.0f", v.y) + " "
+						+ String.format("%.0f", v.z));
 		}
 	}
 
@@ -171,15 +180,20 @@ public class ClientRenderer implements Renderer
 		this.debugInfoUI = debugInfoUI;
 	}
 	
+	public void setFullbright(boolean fullbright)
+	{
+		ClientRenderer.fullbright = fullbright;
+	}
+	
 	public void setDebugSceneInfo(boolean debugInfoScene)
 	{
 		this.debugInfoScene = debugInfoScene;
 		
 		if (this.debugInfoScene)
 		{
-			gizmo[0] = Primitives.addArrow(axisOrigin, new Vector3f(Vectors.X_AXIS).mul(.01f), Vectors.X_AXIS);
-			gizmo[1] = Primitives.addArrow(axisOrigin, new Vector3f(Vectors.Y_AXIS).mul(.01f), Vectors.Y_AXIS);
-			gizmo[2] = Primitives.addArrow(axisOrigin, new Vector3f(Vectors.Z_AXIS).mul(.01f), Vectors.Z_AXIS);
+			gizmo[0] = Primitives.addArrow(axisOrigin, new Vector3f(MCache.X_AXIS).mul(.01f), MCache.X_AXIS);
+			gizmo[1] = Primitives.addArrow(axisOrigin, new Vector3f(MCache.Y_AXIS).mul(.01f), MCache.Y_AXIS);
+			gizmo[2] = Primitives.addArrow(axisOrigin, new Vector3f(MCache.Z_AXIS).mul(.01f), MCache.Z_AXIS);
 			
 			gizmo[0].setScale(1f);
 			gizmo[1].setScale(1f);

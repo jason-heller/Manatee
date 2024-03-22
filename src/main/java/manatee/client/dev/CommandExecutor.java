@@ -17,7 +17,7 @@ public class CommandExecutor {
 	private boolean requireCheats;
 
 	public CommandExecutor(String syntax, Object object, Method[] consumer, boolean requireCheats) {
-		this.syntax = "<" + syntax + ">";
+		this.syntax = syntax;
 		this.object = object;
 		this.methods = consumer;
 		this.argumentType = CommandArgumentType.BOOL_OR_NONE;

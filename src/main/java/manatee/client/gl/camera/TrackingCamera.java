@@ -5,7 +5,6 @@ import static manatee.maths.Maths.HALFPI;
 import org.joml.Vector3f;
 
 import manatee.client.Time;
-import manatee.client.dev.Dev;
 import manatee.client.input.Input;
 import manatee.client.input.Keybinds;
 import manatee.maths.SmoothFloat;

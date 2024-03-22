@@ -12,7 +12,8 @@ import lwjgui.scene.Window;
 import manatee.cache.definitions.binfile.BinaryMapFileReader;
 import manatee.cache.definitions.loader.ParticleSystemLoader;
 import manatee.cache.definitions.loader.exception.MapLoadException;
-import manatee.client.dev.Dev;
+import manatee.client.Client;
+import manatee.client.dev.Command;
 import manatee.client.entity.EntitySystem;
 import manatee.client.entity.SpatialEntity;
 import manatee.client.gl.BlendMode;
@@ -26,12 +27,16 @@ import manatee.client.gl.renderer.nvg.NVGText;
 import manatee.client.input.Input;
 import manatee.client.input.Keybinds;
 import manatee.client.map.tile.Tile;
+import manatee.client.scene.overworld.OverworldScene;
 import manatee.client.ui.ClientUI;
 
 public abstract class MapScene implements IScene
 {
 
-	public static final Vector3f DEFAULT_SUN_VECTOR = new Vector3f(-.5f, .5f, 0);
+	public static final Vector3f DEFAULT_SUN_VECTOR = new Vector3f(0,0,1);
+	
+	public static String mapName = "level";
+
 	protected ICamera camera;
 	protected GameMap map;
 
@@ -51,8 +56,8 @@ public abstract class MapScene implements IScene
 	
 	private Vector4f color = new Vector4f();
 	
-	protected Vector3f lightColor = new Vector3f(1,1,1);
-	protected Vector3f lightVector = new Vector3f(DEFAULT_SUN_VECTOR);
+	protected final Vector3f lightColor = new Vector3f(1,1,1);
+	protected final Vector3f lightVector = new Vector3f(DEFAULT_SUN_VECTOR);
 	
 	private BlendMode blendMode = BlendMode.MULTIPLY;
 	
@@ -62,6 +67,7 @@ public abstract class MapScene implements IScene
 	public void init(ClientUI ui)
 	{
 		CameraUtil.initCommands(this);
+		Command.add("map", "mapname", this, "setMap", false);
 		
 		assets = createAssets();
 			
@@ -74,10 +80,16 @@ public abstract class MapScene implements IScene
 		ParticleSystemLoader.load(particles);
 		
 		this.ui = ui;
-
 	}
 	
 	protected abstract Assets createAssets();
+	
+	public void setMap(String mapName)
+	{
+		MapScene.mapName = mapName;
+		
+		Client.setScene(new OverworldScene());
+	}
 
 	@Override
 	public void tick()

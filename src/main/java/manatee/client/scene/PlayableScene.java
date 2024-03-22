@@ -3,6 +3,7 @@ package manatee.client.scene;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import manatee.client.entity.stock.EquipmentEntity;
 import manatee.client.entity.stock.Player;
 
 public abstract class PlayableScene extends MapScene
@@ -15,5 +16,8 @@ public abstract class PlayableScene extends MapScene
 		player.getPosition().set(position);
 		player.getRotation().set(rotation);
 		entitySystem.setPlayer(player);
+
+		
+		entitySystem.addForm(new EquipmentEntity(assets, player));
 	}
 }

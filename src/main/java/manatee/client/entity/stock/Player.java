@@ -16,13 +16,15 @@ public class Player extends PhysicsForm
 	private float halfWidth = 1;
 	private float halfHeight = 4;
 	
-	private PathFollower pathFollower = new PathFollower(position);
+	private PathFollower pathFollower = new PathFollower(position, rotation);
 	
 	public Player(Assets assets)
 	{
 		position.set(16, 16, 64);
 		this.setExtents(halfWidth, halfWidth, halfHeight);
-		this.setGraphic(assets.getModel("player"), EntityShaderTarget.GENERIC);
+		this.setGraphic(assets.getModel("player"), EntityShaderTarget.ANIMATED);
+		
+		this.animator.setAnimation("player|Idle");
 	}
 	
 	@Override
@@ -33,13 +35,18 @@ public class Player extends PhysicsForm
 			//velocity.z = 10f;
 		}
 		
-		pathFollower.update(scene);
-		//Dev.track(position, "pos", position.x + ", " + position.y);
+		boolean pathFinished = pathFollower.update(scene);
+		
+		if (pathFinished)
+			animator.setAnimation("player|Idle");
 	}
 
 	public void setPath(Vector2f[] path)
 	{
 		pathFollower.setPath(path);
+		
+		if (pathFollower.getPath() != null)
+			animator.setAnimation("player|Walk");
 	}
 
 }

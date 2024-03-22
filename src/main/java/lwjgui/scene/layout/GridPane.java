@@ -379,7 +379,6 @@ public class GridPane extends Pane implements Gappable {
 
 	@Override
 	public boolean isResizeable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

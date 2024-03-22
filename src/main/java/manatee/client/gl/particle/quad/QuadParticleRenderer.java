@@ -38,7 +38,7 @@ import manatee.client.gl.Shader;
 import manatee.client.gl.camera.ICamera;
 import manatee.client.gl.particle.Particle;
 import manatee.client.gl.particle.ParticleAtlas;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class QuadParticleRenderer
 {
@@ -62,7 +62,7 @@ public class QuadParticleRenderer
 
 	public QuadParticleRenderer()
 	{
-		shader = new Shader("scene/particle/quad.vert", "scene/particle/quad.frag");
+		shader = new Shader("shader/particle/quad.vert", "shader/particle/quad.frag");
 		
 		createMesh();
 		createInstancedVbo(INSTANCE_DATA_LENGTH * MAX_PARTICLES);
@@ -116,7 +116,7 @@ public class QuadParticleRenderer
 			Particle part = iter.next();
 			buildModelviewMatrix(part.getPosition(), part.getRotation().angle, part.getScale(), camera.getViewMatrix(), vboData);
 			float lifeRatio = part.getLife() / part.getLifeSpan();
-			prtAtlas.getTextureCoords(part.getOrder(), lifeRatio, vboData, pointer);
+			prtAtlas.getTextureCoords(lifeRatio, vboData, pointer);
 			pointer += 5;
 
 			part.tick();
@@ -184,7 +184,7 @@ public class QuadParticleRenderer
 		matrix.m21(viewMatrix.m12());
 		matrix.m22(viewMatrix.m22());
 		
-		matrix.rotate((float) rot, Vectors.Z_AXIS);
+		matrix.rotate((float) rot, MCache.Z_AXIS);
 		matrix.scale(scale);
 		
 		viewMatrix.mul(matrix, matrix);

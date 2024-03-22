@@ -12,7 +12,6 @@ import org.joml.Vector4f;
 import manatee.cache.definitions.Model;
 import manatee.cache.definitions.mesh.IMesh;
 import manatee.cache.definitions.texture.ITexture;
-import manatee.client.dev.Dev;
 import manatee.client.entity.Entity;
 import manatee.client.entity.EntitySystem;
 import manatee.client.entity.stock.PropEntity;
@@ -60,7 +59,7 @@ public class EntityLump implements Serializable
 		this.name = e.getName();
 		this.color = e.getColor();
 		this.tags = e.getTags();
-		this.model = e.getModel();
+		this.model = e.getModelPath();
 		this.mesh = e.getMesh();
 		this.texture = e.getTexture();
 		this.lodDistanceSqr = e.getLodDistanceSqr();
@@ -77,8 +76,6 @@ public class EntityLump implements Serializable
 		
 		Assets assets = scene.getAssets();
 		
-		Dev.log(name);
-		
 		switch(name)
 		{
 			case "Player":
@@ -91,34 +88,44 @@ public class EntityLump implements Serializable
 			}
 			case "SunControl":
 			{
-				Vector3f lightDir = scene.getLightVector();
-				rotation.transform(lightDir);
+				if (scene instanceof EditorScene)
+				{
+					Vector3f lightDir = scene.getLightVector();
+					rotation.transform(lightDir);
+				}
 				return;
 			}
 			case "WaterControl":
 			{
-				water.getColor().set(color);
-				water.setWaveAmplitude(getFloat("waveAmplitude"));
-				water.setFlowSpeed(getFloat("flowSpeed"));
-				
-				Vector3f v = quatToVec3(rotation);
-				water.getFlowDir().set(v.x, v.y);
-				
-				//"reflectivity": "0.0",
+				//if (scene instanceof EditorScene)
+				{
+					water.getColor().set(color);
+					water.setWaveAmplitude(getFloat("waveAmplitude"));
+					water.setFlowSpeed(getFloat("flowSpeed"));
+					
+					Vector3f v = quatToVec3(rotation);
+					water.getFlowDir().set(v.x, v.y);
+					
+					//"reflectivity": "0.0",
+				}
 				break;
 			}
 			case "WindControl":
 			{
+				
 				wind.getWindVector().set(quatToVec3(rotation));
 				wind.setWindSpeed(getFloat("windSpeed"));
 				wind.setWindStrength(getFloat("windStrength"));
 				break;
 			}
-			case "ChimneySmokeEmitter":
+			case "CampfireEffect":
 			{
-				scene.getParticleManager().addEmitter("smoke", position, true);
+				scene.getParticleManager().addEmitter("smoke", new Vector3f(position).add(0,0,1), true);
+				scene.getParticleManager().addEmitter("fire", position, true);
 				break;
 			}
+			case "SoundscapeEntity":
+				break;
 				
 			default:
 			{

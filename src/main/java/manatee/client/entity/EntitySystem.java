@@ -49,7 +49,7 @@ public class EntitySystem
 		entityRenderer.dispose();
 	}
 	
-	public void addEntity(Entity entity)
+	public void addEntityNotRendered(Entity entity)
 	{
 		nonStaticEntities.add(entity);
 		entity.onSpawn();
@@ -80,8 +80,9 @@ public class EntitySystem
 		GameMap map = scene.getMap();
 		MapGeometry geom = map.getGeometry();
 		
-		render(EntityShaderTarget.GENERIC, camPos, geom, scene);
-		render(EntityShaderTarget.FOLIAGE, camPos, geom, scene);
+		for(EntityShaderTarget target : EntityShaderTarget.values())
+			render(target, camPos, geom, scene);
+		
 	}
 
 	private void render(EntityShaderTarget shaderTarget, Vector3f camPos, MapGeometry geom, MapScene scene)

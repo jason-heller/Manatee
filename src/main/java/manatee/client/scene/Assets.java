@@ -8,6 +8,7 @@ import manatee.cache.definitions.IAsset;
 import manatee.cache.definitions.Model;
 import manatee.cache.definitions.loader.MeshLoader;
 import manatee.cache.definitions.mesh.IMesh;
+import manatee.cache.definitions.mesh.MeshGroup;
 import manatee.cache.definitions.sound.Sound;
 import manatee.cache.definitions.texture.ITexture;
 import manatee.cache.definitions.texture.Texture2D;
@@ -22,6 +23,8 @@ public abstract class Assets
 	protected HashCollection<String, Model> models = new HashCollection<>();
 	
 	public static final String RESOURCE_PATH = "src/main/resources/";
+	
+	public static final String NULL = (String)null;
 
 	public abstract void loadAssets();
 	
@@ -88,29 +91,70 @@ public abstract class Assets
 		return model;
 	}
 	
+	public Model loadModel(String key, String modelPath, String[] texturePaths)
+	{
+		return loadModel(key, new String[] {modelPath}, texturePaths);
+	}
+	
 	public Model loadModel(String key, String[] modelPath, String texturePath)
 	{
-		IMesh[] meshGroup = new IMesh[modelPath.length];
-
-		for(int i = 0; i < meshGroup.length; i++)
+		return loadModel(key, modelPath, texturePath == null ? null : new String[] {texturePath});
+	}
+	
+	public Model loadModel(String key, String[] modelPaths, String[] texturePaths)
+	{
+		MeshGroup[] meshGroups = new MeshGroup[modelPaths.length];
+		int nMeshes = 0;
+		
+		for(int i = 0; i < meshGroups.length; i++)
 		{
-			meshGroup[i] = MeshLoader.loadMesh(new File(RESOURCE_PATH + modelPath[i]));
+			meshGroups[i] = MeshLoader.loadModel(new File(RESOURCE_PATH + modelPaths[i]));
 			
-			if (meshGroup[i] == null)
+			if (meshGroups[i] == null)
 			{
-				LoggerFactory.getLogger("IO").error("Could not find: " + modelPath[i]);
+				LoggerFactory.getLogger("IO").error("Could not find mesh: " + modelPaths[i]);
 				return null;
 			}
+			
+			nMeshes += meshGroups[i].getMeshes().length;
+			
+			for(IMesh m : meshGroups[i].getMeshes())
+				meshes.add(m);
 		}
 		
-		for(IMesh mesh : meshGroup)
-			meshes.add(mesh);
+		ITexture[] modelTextures = new ITexture[texturePaths.length];
 		
-		ITexture texture = null;
+		for(int i = 0; i < modelTextures.length; i++)
+		{
+			modelTextures[i] = (texturePaths[i] != null) ? loadTexture2D(texturePaths[i]) : GlobalAssets.NO_TEX;	
+			
+			if (modelTextures[i] == null)
+			{
+				LoggerFactory.getLogger("IO").error("Could not find texture: " + modelTextures[i]);
+				return null;
+			}
+			
+			
+		}
 		
-		texture = (texturePath != null) ? loadTexture2D(texturePath) : GlobalAssets.NO_TEX;
-
-		Model model = new Model(meshGroup, texture);
+		IMesh[] modelMeshes = new IMesh[nMeshes];
+		int i = 0;
+		for(MeshGroup meshGroup : meshGroups)
+		{
+			for(IMesh mesh : meshGroup.getMeshes())
+			{
+				modelMeshes[i] = mesh;
+				i++;
+			}
+		}
+	
+		Model model = new Model(modelMeshes, modelTextures);
+				
+		if (!meshGroups[0].isStatic())
+		{
+			model.setAnimations(meshGroups[0].getAnimations());
+			model.setAnimRootNode(meshGroups[0].getAnimRootNode());
+		}
 		
 		models.put(key, model);
 		
@@ -123,19 +167,25 @@ public abstract class Assets
 				.append(RESOURCE_PATH)
 				.append(modelPath);
 		
-		IMesh[] meshGroup = MeshLoader.loadModel(new File(str.toString()));
+		MeshGroup meshGroup = MeshLoader.loadModel(new File(str.toString()));
 		
 		if (meshGroup == null)
 			return null;
 		
-		for(IMesh mesh : meshGroup)
+		for(IMesh mesh : meshGroup.getMeshes())
 			meshes.add(mesh);
 		
 		ITexture texture = null;
 		
 		texture = (texturePath != null) ? loadTexture2D(texturePath) : GlobalAssets.NO_TEX;
-
-		Model model = new Model(meshGroup, texture);
+		
+		Model model = new Model(meshGroup.getMeshes(), texture);
+		
+		if (!meshGroup.isStatic())
+		{
+			model.setAnimations(meshGroup.getAnimations());
+			model.setAnimRootNode(meshGroup.getAnimRootNode());
+		}
 		
 		return model;
 	}

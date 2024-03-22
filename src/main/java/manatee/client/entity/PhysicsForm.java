@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 
 import manatee.client.Time;
 import manatee.client.map.MapGeometry;
-import manatee.client.map.tile.Tile;
 import manatee.client.scene.GameMap;
 import manatee.client.scene.MapScene;
 
@@ -18,6 +17,8 @@ import manatee.client.scene.MapScene;
 public abstract class PhysicsForm extends Form
 {
 	protected Vector3f velocity = new Vector3f();
+	
+	private boolean grounded = false;
 
 	public PhysicsForm()
 	{
@@ -29,20 +30,21 @@ public abstract class PhysicsForm extends Form
 		GameMap map = scene.getMap();
 		MapGeometry geom = map.getGeometry();
 		
-		int px = (int)position.x;
-		int py = (int)position.y;
+		//int px = (int)position.x;
+		//int py = (int)position.y;
 		
-		Tile tile = geom.getTileAt(px, py);
-		float height = geom.getHeightAt(px, py);
+		// Tile tile = geom.getTileAt(px, py);
+		float height = geom.getHeightAt(position.x, position.y) + boundingBox.halfExtents.z;
 		
 		position.add(new Vector3f(velocity).mul(Time.deltaTime));
 		
 		velocity.z -= .25f;
 		
-		if (position.z <= height + boundingBox.halfExtents.z)
+		if (position.z <= height || (grounded && position.z - height < .25f))
 		{
-			position.z = height + boundingBox.halfExtents.z;
+			position.z = height;
 			velocity.z = 0f;
+			grounded = true;
 		}
 		
 		super.updateInternal(scene);

@@ -15,11 +15,11 @@ public class MapInfoLump implements Serializable
 	public int spacing, resolution;
 	
 	public Vector4f color, waterColor;
-	public Vector3f lightColor;
+	public Vector3f lightColor, lightVector;
 
 	public MapInfoLump() {}
 	
-	public MapInfoLump(String mapName, String tileset, int resolution, int spacing, Vector4f color, Vector3f lightColor, Vector4f waterColor)
+	public MapInfoLump(String mapName, String tileset, int resolution, int spacing, Vector3f lightVector, Vector4f color, Vector3f lightColor, Vector4f waterColor)
 	{
 		this.mapName = mapName;
 		this.tileset = tileset;
@@ -28,6 +28,7 @@ public class MapInfoLump implements Serializable
 		
 		this.color = color;
 		this.lightColor = lightColor;
+		this.lightVector = lightVector;
 		this.waterColor = waterColor;	
 	}
 
@@ -35,6 +36,7 @@ public class MapInfoLump implements Serializable
 	{
 		scene.getColor().set(color);
 		scene.getLightColor().set(lightColor);
+		scene.getLightVector().set(lightVector);
 		// scene.getColor().set(waterColor);
 		scene.setTileset(tileset);
 		

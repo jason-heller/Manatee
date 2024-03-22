@@ -13,7 +13,7 @@ public class Particle
 	
 	private AxisAngle4f rotation = new AxisAngle4f();
 	
-	private int order;
+	// private int order;
 	
 	private Vector4f color = new Vector4f(1,1,1,1);
 	
@@ -35,7 +35,7 @@ public class Particle
 		position.add(velocity.x * delta, velocity.y * delta, velocity.z * delta);
 	}
 
-	public int getOrder()
+	/*public int getOrder()
 	{
 		return order;
 	}
@@ -43,7 +43,7 @@ public class Particle
 	public void setOrder(int order)
 	{
 		this.order = order;
-	}
+	}*/
 
 	public AxisAngle4f getRotation()
 	{

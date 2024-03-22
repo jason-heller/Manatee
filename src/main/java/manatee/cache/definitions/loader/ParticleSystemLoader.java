@@ -12,6 +12,7 @@ import java.util.List;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import manatee.cache.definitions.texture.ITexture;
 import manatee.client.Client;
 import manatee.client.dev.Dev;
 import manatee.client.gl.particle.ParticleManager;
@@ -28,7 +29,7 @@ public class ParticleSystemLoader
 	{
 		try
 		{
-			List<String> lines = Files.readAllLines(Paths.get("src/main/resources/scene/particle/particles.txt"));
+			List<String> lines = Files.readAllLines(Paths.get("src/main/resources/data/particles.txt"));
 			Iterator<String> iter = lines.iterator();
 			while(iter.hasNext())
 			{
@@ -37,6 +38,7 @@ public class ParticleSystemLoader
 				{
 					String psName = line.split("\\{")[0];
 					int psMeshId = -1;
+					String psAtlas = null;
 					float pps = 10f;
 					float ppsVariance = 0f;
 					int ppe = 1;
@@ -57,12 +59,29 @@ public class ParticleSystemLoader
 						case "Mesh":
 							psMeshId = (int)Float.parseFloat(data[1]);
 							break;
+						case "Atlas":
+							psAtlas = data[1];
+							break;
 						default:
 							attribs.add(parseAttrib(data));
 						}
 					}
 					
-					ParticleSystem ps = particles.addSystem(psName, psMeshId, attribs.toArray(new IParticleAttrib[0]));
+					ParticleSystem ps;
+					
+					IParticleAttrib[] attribsArr = attribs.toArray(new IParticleAttrib[0]);
+					
+					if (psAtlas != null)
+					{
+						ITexture tex = ParticleManager.textures.get(psAtlas);
+						int atlasWidth = ParticleManager.textureAtlasSizes.get(psAtlas);
+						ps = particles.addSystem(psName, tex, atlasWidth, true, false, attribsArr);
+					}
+					else
+					{
+						ps = particles.addSystem(psName, psMeshId, attribsArr);
+					}
+					
 					ps.setParticlesPerEmission(ppe);
 					ps.setParticlesPerSecond(pps);
 					ps.setEmissionVariance(ppsVariance);

@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 import manatee.client.gl.particle.Particle;
 import manatee.client.gl.particle.attribs.IParticleAttrib;
 import manatee.maths.Maths;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class CircleEmitterParticleAttrib implements IParticleAttrib
 {
@@ -22,9 +22,9 @@ public class CircleEmitterParticleAttrib implements IParticleAttrib
 		this.axis = axis;
 		
 		if (Math.abs(axis.z) == 1.0)
-			tangent = Vectors.X_AXIS;
+			tangent = MCache.X_AXIS;
 		else
-			this.tangent = new Vector3f(axis).cross(Vectors.Z_AXIS);
+			this.tangent = new Vector3f(axis).cross(MCache.Z_AXIS);
 		
 		this.radius = radius;
 	}
@@ -32,7 +32,7 @@ public class CircleEmitterParticleAttrib implements IParticleAttrib
 	@Override
 	public void init(Particle particle)
 	{
-		Vector3f pos = particle.getPosition();
+		Vector3f pos = new Vector3f();
 		
 		pos.set(tangent);
 		
@@ -42,6 +42,8 @@ public class CircleEmitterParticleAttrib implements IParticleAttrib
 		rot.transform(pos);
 		pos.mul(((float)Math.random()) * radius);
 		pos.add(origin);
+		
+		particle.getPosition().add(pos);
 	}
 
 	@Override

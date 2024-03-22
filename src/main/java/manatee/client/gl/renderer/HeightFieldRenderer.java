@@ -12,6 +12,8 @@ import manatee.cache.definitions.mesh.IMesh;
 import manatee.client.gl.Shader;
 import manatee.client.map.MapRegion;
 import manatee.client.map.tile.Tilemap;
+import manatee.client.ui.ClientRenderer;
+import manatee.maths.MCache;
 
 public class HeightFieldRenderer extends BaseRenderer
 {
@@ -20,7 +22,7 @@ public class HeightFieldRenderer extends BaseRenderer
 	
 	public HeightFieldRenderer(Vector3f lightColor, Vector3f lightVector)
 	{
-		shader = new Shader("scene/heightfield.vsh", "scene/heightfield.fsh");
+		shader = new Shader("shader/heightfield.vsh", "shader/heightfield.fsh");
 		
 		this.lightColor = lightColor;
 		this.lightVector = lightVector;
@@ -33,13 +35,21 @@ public class HeightFieldRenderer extends BaseRenderer
 		
 		shader.setUniform("v_AmbientColor", lightColor);
 		shader.setUniform("v_AmbientVector", lightVector);
+		
+		if (ClientRenderer.fullbright)
+		{
+			shader.setUniform("v_LightNum", 0);
+			shader.setUniform("v_AmbientColor", MCache.ONE);
+			shader.setUniform("v_AmbientVector", MCache.Z_AXIS);
+		}
 	}
 	
 	public void draw(Matrix4f projectionView, Tilemap tileMap, Collection<MapRegion> regions)
 	{
 		begin(projectionView);
 		
-		shader.setTexture("v_Diffuse", tileMap.getTileAssets().getTexture("terrain"), 0);
+		shader.setTexture("f_Terrain0", tileMap.getTileAssets().getTexture("terrain0"), 0);
+		shader.setTexture("f_Terrain1", tileMap.getTileAssets().getTexture("terrain1"), 1);
 		for(MapRegion region : regions)
 		{
 			shader.setUniform("v_Stride", (float)region.getXResolution());

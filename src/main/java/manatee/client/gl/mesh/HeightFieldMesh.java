@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 
 import manatee.cache.definitions.MeshUtil;
 import manatee.cache.definitions.mesh.BaseMesh;
+import manatee.maths.MCache;
 import manatee.maths.Maths;
 
 public class HeightFieldMesh extends BaseMesh
@@ -114,6 +115,12 @@ public class HeightFieldMesh extends BaseMesh
 	public int getVertexCount()
 	{
 		return vertexCount;
+	}
+
+	@Override
+	public Vector3f getColor()
+	{
+		return MCache.ONE;
 	}
 
 }

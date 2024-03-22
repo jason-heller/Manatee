@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import lwjgui.LWJGUIUtil;
 import lwjgui.scene.Window;
@@ -16,6 +17,7 @@ import manatee.client.dev.Dev;
 import manatee.client.dev.LoggerOutputStream;
 import manatee.client.input.Input;
 import manatee.client.input.Keybinds;
+import manatee.client.inventory.item.ItemData;
 import manatee.client.scene.Assets;
 import manatee.client.scene.GlobalAssets;
 import manatee.client.scene.IScene;
@@ -32,6 +34,7 @@ public class Client
 	private static Window window;
 	
 	private static IScene clientScene;
+	private static ClientProfile clientProfile;
 	private static ClientUI clientUI;
 	
 	private Time time;
@@ -80,6 +83,9 @@ public class Client
 			clientScene = new OverworldScene();
 			clientUI = new ClientUILoadExternal(clientScene);
 		}
+
+		ItemData.loadItems();
+		clientProfile = new ClientProfile();
 		
 		window = WindowManager.generateWindow(handle);
 
@@ -187,6 +193,11 @@ public class Client
 	public static IScene scene()
 	{
 		return clientScene;
+	}
+	
+	public static ClientProfile profile()
+	{
+		return clientProfile;
 	}
 	
 	public static ClientUI ui()

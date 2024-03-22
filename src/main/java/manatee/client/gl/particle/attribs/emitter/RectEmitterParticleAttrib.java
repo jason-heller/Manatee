@@ -4,7 +4,7 @@ import org.joml.Vector3f;
 
 import manatee.client.gl.particle.Particle;
 import manatee.client.gl.particle.attribs.IParticleAttrib;
-import manatee.maths.Vectors;
+import manatee.maths.MCache;
 
 public class RectEmitterParticleAttrib implements IParticleAttrib
 {
@@ -20,9 +20,9 @@ public class RectEmitterParticleAttrib implements IParticleAttrib
 		this.origin = origin;
 		
 		if (Math.abs(axis.z) == 1.0)
-			tangent = Vectors.X_AXIS;
+			tangent = MCache.X_AXIS;
 		else
-			this.tangent = new Vector3f(axis).cross(Vectors.Z_AXIS);
+			this.tangent = new Vector3f(axis).cross(MCache.Z_AXIS);
 		
 		this.coTangent = new Vector3f(tangent).cross(axis).negate();
 		
@@ -33,12 +33,14 @@ public class RectEmitterParticleAttrib implements IParticleAttrib
 	@Override
 	public void init(Particle particle)
 	{
-		Vector3f pos = particle.getPosition();
+		Vector3f pos = new Vector3f();
 		
 		pos.set(new Vector3f(tangent).mul((float)Math.random() * width));
 		pos.add(new Vector3f(coTangent).mul((float)Math.random() * height));
 		
 		pos.add(origin);
+
+		particle.getPosition().add(pos);
 	}
 
 	@Override
